@@ -1,0 +1,13 @@
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Constants\*.cnx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Components\*.cmx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Entity_Service_Template\*.xml
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\FormTemplates\*.cmx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\GlobalProcs\*.prx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Glyphs\*.glx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\IncludeProcs\*.ipx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Models\*.xml
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\MultiTierComponents\*.ipx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\OtherObjects\*.*
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\StartUpShells\*.shx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Variables\*.vrx
+/imp H:\unicomp\CSCE\CSPV6\CS08_3_12\Menus\*.mnx
