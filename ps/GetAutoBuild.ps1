@@ -3,8 +3,6 @@
     I prefer to work on my box local. This script will go to all the build servers and obtain the current copy of COMMANDseriesBuild.
     It will Name them so you know what box they came from. The script then checks out the COMMANDseriesBuild and copies it to my working Folder
     I will then do Compares of the build server files (manually using beyond compare). update my .bld so it is current. make my changes.
-    ==
-    I will the Create 2 more Powershell scripts (TestAutoBuild, and PutAutoBuild)
 #>
 New-Item -Force -ItemType directory -Path C:\Users\jsmith\Desktop\AutoBuild
 Copy-Item \\al-csbuild-s04\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s04
