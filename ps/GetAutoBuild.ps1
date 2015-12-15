@@ -5,8 +5,8 @@
     I will then do Compares of the build server files (manually using beyond compare). update my .bld so it is current. make my changes.
 #>
 New-Item -Force -ItemType directory -Path C:\Users\jsmith\Desktop\AutoBuild
-Copy-Item \\al-csbuild-s04\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s04
-Copy-Item \\al-csbuild-s05\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s05
+Copy-Item \\al-csbuild-s04\c\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s04
+Copy-Item \\al-csbuild-s05\c\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s05
 Copy-Item \\al-csbuild-vm1\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.vm1
 h:
 cd H:\unicomp\AutoBuild\COMMANDseries
