@@ -13,6 +13,16 @@ $TFSLocation = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\
 $MainLocation = "P:\CS08_2X\CS08_" + $CSVersionMajor + "_" + $CSVersionMinor + "\USERS\MAIN\"
 $PatternStart = '<DAT name=\"ULABEL\">'
 $PatternEnd = "</DAT>"
+$Tables = Read-Host -Prompt 'Table(s) ordr,schl(<cr>=all)'
+$Pieces = $Tables.split(",")
+if ($Pieces[1] -gt "")
+{
+	foreach ($Piece in $Pieces)
+	{
+		$Piece = $Piece.ToUpper()
+		$Patterns = $Patterns + ($PatternStart + $Piece + $PatternEnd)
+	}
+}
 
 cd $CSMessageLocation
 $tf = & $TFSLocation get $/CSCE/CS06/CS08. + $CSVersion + /USYS/messagesgenerated.uar /noprompt
@@ -33,15 +43,23 @@ cd $MainLocation
 & $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /imp XML: + $CSModelLocation + *.xml
 & $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /con
 & $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /tst gen_messages.aps RSY
-foreach ($file in Get-ChildItem -Path + $CSComponentLocation + \*.cmx | Select-String -pattern + $PatternStart + "FCUS" + $PatternEnd + | Select-Object -Unique path)
+if ($Patterns.Count -le 0)
 {
-  $filespec = $file.path
-  $pieces = $filespec.split("\")
-  $filename = $pieces[$pieces.count - 1]
-  $pieces = $filename.split(".")
-  $justname = $pieces[$pieces.count - 2]
-  $justname
-  & $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /cpt $justname
+	& $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /frm
+	& $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /svc
+}
+else
+{
+	foreach ($file in Get-ChildItem -Path + $CSComponentLocation + \*.cmx | Select-String -pattern $Patterns | Select-Object -Unique path)
+	{
+		$filespec = $file.path
+		$pieces = $filespec.split("\")
+		$filename = $pieces[$pieces.count - 1]
+		$pieces = $filename.split(".")
+		$justname = $pieces[$pieces.count - 2]
+		$justname
+		& $UnifaceIDFLocation /ini= + $MainLocation + idf96.ini /cpt $justname
+	}
 }
 
 cd $PSScriptRoot

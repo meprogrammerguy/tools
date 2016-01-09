@@ -1,10 +1,25 @@
 <#
     Powershell DBUpdate
 #>
-h:
-cd H:\unicomp\CSCE\CS06\CS08.2.27\USYS
-$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get $/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar /noprompt
-$tf | Out-null
-$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" checkout $/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar /noprompt
-$tf | Out-null
-cd C:\Users\jsmith\Documents\GitHub\tools\ps\DBUpdate
+$PatternStart = '<DAT name=\"ULABEL\">'
+$PatternEnd = "</DAT>"
+$Patterns = @()
+$Tables = Read-Host -Prompt 'Table(s) ordr,schl(<cr>=all)'
+$Pieces = $Tables.split(",")
+if ($Pieces[1] -gt "")
+{
+	foreach ($Piece in $Pieces)
+	{
+		$Piece = $Piece.ToUpper()
+		$Patterns = $Patterns + ($PatternStart + $Piece + $PatternEnd)
+	}
+}
+$Patterns.Count
+if ($Patterns.Count -le 0)
+{
+	"None";
+}
+else
+{
+	$Patterns
+}
