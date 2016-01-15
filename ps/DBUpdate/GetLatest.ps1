@@ -95,7 +95,7 @@ write-host "$(get-date) Analyizing Models" -foreground "green"
 & $UnifaceIDFLocation $INILocation /con | Out-null
 $elapsed = GetElapsedTime $script:startTime
 write-host "Elapsed Time: " $elapsed -foreground "green"
-write-host "$(get-date) Generating R,S and Y messages" -foreground "green"
+write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFLocation $INILocation /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $script:startTime
 write-host "Elapsed Time: " $elapsed -foreground "green"
