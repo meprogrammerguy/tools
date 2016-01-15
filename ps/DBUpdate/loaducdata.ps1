@@ -29,16 +29,18 @@ $ImportModels = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml"
 $PatternStart = '<DAT name=\"ULABEL\">'
 $PatternEnd = "</DAT>"
 $CSPrompt = $CSVersion + ' DBUpdate script - Table(s) ordr,schl (<cr>=all)'
-<#
-$Tables = Read-Host -Prompt $CSPrompt
-#>
-$script:startTime = Get-Date
 function GetElapsedTime([datetime]$starttime) 
 {
     $runtime = $(get-date) - $starttime
     $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
     $retStr
 }
+<#
+$Tables = Read-Host -Prompt $CSPrompt
+#>
+$script:startTime = Get-Date
+write-host "Script Started at $script:startTime" -foreground "green"
+<#
 $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
 {
@@ -49,8 +51,7 @@ if ($Pieces[0] -gt "")
 		$Patterns = $Patterns + @($PatternStart + $Piece + $PatternEnd)
 	}
 }
-write-host "Script Started at $script:startTime" -foreground "green"
-<#
+
 cd $CSMessageLocation
 Convert-Path .
 $LockTest = & $TFSLocation status /user:* /format:detailed $CSMessageArgs
