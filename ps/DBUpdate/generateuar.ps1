@@ -39,6 +39,7 @@ function GetElapsedTime([datetime]$starttime)
 $Tables = Read-Host -Prompt $CSPrompt
 #>
 $script:startTime = Get-Date
+Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
 <#
 $Pieces = $Tables.split(",")
@@ -135,22 +136,67 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 #>
 
 $AsnGenerated = "D:\DBUpdate\MessagesGenerated_v2\"
-$INIGenerated = "/ini=P:\CS08_2X\MessagesGenerated\USERS\MAIN\idf96.ini"
+$URRGenerated = "D:\DBUpdate\MessagesGenerated_v2\messagesgenerated.uar"
+$INIGenerated = "/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini"
+$ResourcesGenerated = "D:\DBUpdate\MessagesGenerated_v2\resources\msg"
+$ZipLocation = "D:\DBUpdate\MessagesGenerated_v2\7za.exe"
+$ZipArgs = "a -tzip "
 
 cd $ASNGenerated
 Convert-Path .
-write-host "$(get-date) Generating UAR file" -foreground "green"
+If (Test-Path $URRGenerated)
+{
+  write-host "$(get-date) Removing old UAR file" -foreground "green"
+	Remove-Item $URRGenerated -force
+}
+
+If (Test-Path $ResourcesGenerated)
+{
+  $itemtime = Get-Date
+  write-host "$(get-date) Removing old msg files" -foreground "green"
+  rm -r $ResourcesGenerated
+  $elapsed = GetElapsedTime $itemtime
+  write-host "Elapsed Time: " $elapsed -foreground "green"
+}
+
+cd $CSModelLocation
+Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Getting Latest Models" -foreground "green"
+& $TFSLocation get $CSModelArgs | Out-null
+$elapsed = GetElapsedTime $script:startTime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
+$itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
 & $UnifaceIDFLocation $INIGenerated /imp $ImportModels | Out-null
-$elapsed = GetElapsedTime $script:startTime
+$elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+
+$itemtime = Get-Date
 write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFLocation $INIGenerated /tst gen_messages.aps RSY | Out-null
-$elapsed = GetElapsedTime $script:startTime
+$elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+$itemtime = Get-Date
+write-host "$(get-date) Generating UAR file" -foreground "green"
+& $ZipLocation a -tzip $URRGenerated $ResourcesGenerated\ | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+If (Test-Path "d:\messages\messagesgenerated.old")
+{
+  write-host "$(get-date) Removing old UAR backup file" -foreground "green"
+	Remove-Item d:\messages\messagesgenerated.old -force
+}
+write-host "$(get-date) Renaming d:\messages\messagesgenerated.uar to messagesgenerated.old" -foreground "green"
+Rename-Item d:\messages\messagesgenerated.uar messagesgenerated.old
+write-host "$(get-date) Copying new messagesgenerated.uar to TFS checkin directory" -foreground "green"
+Copy-Item $URRGenerated $CSMessageLocation
 
-
+cd $CSMessageLocation
+Convert-Path .
+New-TfsChangeset -Item $CSMessageArgs -Verbose -Comment "Updated from DBUpdate script" -Override true
 
 cd $PSScriptRoot
 Convert-Path .
