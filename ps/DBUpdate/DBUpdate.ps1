@@ -34,6 +34,9 @@ $INIGenerated = "/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini"
 $ResourcesGenerated = "D:\DBUpdate\MessagesGenerated_v2\resources\msg"
 $ZipLocation = "D:\DBUpdate\MessagesGenerated_v2\7za.exe"
 $ZipArgs = "a -tzip "
+$DevoLogs = "D:\DBUpdate\Devo_v2\Logs\"
+$GeneratedLogs = "D:\DBUpdate\MessagesGenerated_v2\Logs\"
+$CurrentUser = [Environment]::UserName
 $CSPrompt = $CSVersion + ' DBUpdate script - Table(s) ordr,schl (<cr>=all)'
 function GetElapsedTime([datetime]$starttime) 
 {
@@ -45,6 +48,9 @@ function GetElapsedTime([datetime]$starttime)
 $Tables = Read-Host -Prompt $CSPrompt
 
 $script:startTime = Get-Date
+[Environment]::UserName
+[Environment]::UserDomainName
+[Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
 
@@ -81,6 +87,28 @@ else
   $elapsed = GetElapsedTime $script:startTime
   write-host "Total Elapsed Time: " $elapsed;
   Exit
+}
+
+cd $DevoLogs
+Convert-Path .
+write-host "$(get-date) Removing old log files" -foreground "green"
+foreach ($file in Get-ChildItem -name)
+{
+  if ($file -match $CurrentUser)
+  {
+    Remove-Item $file -force
+  } 
+}
+
+cd $GeneratedLogs
+Convert-Path .
+write-host "$(get-date) Removing old log files" -foreground "green"
+foreach ($file in Get-ChildItem -name)
+{
+  if ($file -match $CurrentUser)
+  {
+    Remove-Item $file -force
+  } 
 }
 
 cd $CSComponentLocation
@@ -126,12 +154,12 @@ if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceIDFLocation $INILocation /svc | Out-null
+	& $UnifaceIDFLocation $INILocation /svc /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Forms" -foreground "green"
-	& $UnifaceIDFLocation $INILocation /frm | Out-null
+	& $UnifaceIDFLocation $INILocation /frm /inf | Out-null
 }
 else
 {
@@ -144,7 +172,7 @@ else
 		$pieces = $filename.split(".")
 		$justname = $pieces[$pieces.count - 2]
 		write-host "$(get-date) Compiling $justname" -foreground "green"
-		& $UnifaceIDFLocation $INILocation /cpt $justname | Out-null
+		& $UnifaceIDFLocation $INILocation /cpt /inf $justname | Out-null
 	}
 }
 $elapsed = GetElapsedTime $itemtime
@@ -218,7 +246,7 @@ cd $CSMessageLocation
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Checking in messagesgenerated.uar" -foreground "green"
-New-TfsChangeset -Item $CSMessageArgs -Verbose -Comment "Updated from DBUpdate script" -Override true
+New-TfsChangeset -Item $CSMessageArgs -Verbose -Comment "Updated from DBUpdate script" -Override false
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
