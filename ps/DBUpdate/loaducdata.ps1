@@ -29,11 +29,11 @@ $ImportModels = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml"
 $PatternStart = '<DAT name=\"ULABEL\">'
 $PatternEnd = "</DAT>"
 $CSPrompt = $CSVersion + ' DBUpdate script - Table(s) ordr,schl (<cr>=all)'
-$LoadUCDataLocation = "C:\Users\jsmith\Documents\GitHub\tools\LoadUCDATA\LoadUCDATA\bin\Debug\loaducdata.exe"
+$LoadUCDataLocation = $AsnLocation  + "loaducdata.exe"
 $LoadUCDataFile = "P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql"
-$LoadUCDataFile = "D:\DBUpdate\Devo_v2\LoadUCData.sql"
-$LoadUCDataOld = "D:\DBUpdate\Devo_v2\LoadUCData.old"
-$LoadUCDataASN = "D:\DBUpdate\Devo_v2\idf.asn"
+$LoadUCDataTempFile = $AsnLocation  + "LoadUCData.sql"
+$LoadUCDataOld = $AsnLocation  + "LoadUCData.old"
+$LoadUCDataASN = $AsnLocation + "idf.asn"
 $LoadUCDataArgs = $LoadUCDataASN + "," + $LoadUCDataFile
 function GetElapsedTime([datetime]$starttime) 
 {
@@ -139,14 +139,12 @@ $Patterns
 $elapsed = GetElapsedTime $script:startTime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 #>
-
+cd $AsnLocation
+Convert-Path .
 If (Test-Path $LoadUCDataOld)
 {
-  $itemtime = Get-Date
   write-host "$(get-date) Removing old LoadUCData file" -foreground "green"
 	Remove-Item $LoadUCDataOld -force
-  $elapsed = GetElapsedTime $itemtime
-  write-host "Elapsed Time: " $elapsed -foreground "green"
 }
 If (Test-Path $LoadUCDataFile)
 {
@@ -155,7 +153,7 @@ If (Test-Path $LoadUCDataFile)
 }
 $itemtime = Get-Date
 write-host "$(get-date) Generating LoadUCData.sql (oracle DB only)" -foreground "green"
-$outputTool = & $LoadUCDataLocation ora, $LoadUCDataASN, $LoadUCDataFile
+$outputTool = & $LoadUCDataLocation ora, $LoadUCDataASN, $LoadUCDataTempFile
 write-output $outputTool
 if ($outputTool -match "error")
 {
@@ -167,6 +165,14 @@ else
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
+
+If (Test-Path $LoadUCDataFile)
+{
+  write-host "$(get-date) Removing production LoadUCData file" -foreground "green"
+	Remove-Item $LoadUCDataFile -force
+}
+write-host "$(get-date) Copying LoadUCData.sql to production" -foreground "green"
+Copy-Item $LoadUCDataTempFile $LoadUCDataFile
 
 cd $PSScriptRoot
 Convert-Path .
