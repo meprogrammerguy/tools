@@ -148,6 +148,8 @@ if ($filenew.length -gt $fileold.length)
 }
 else
 {
+  $sizeIssue "Old size: " + $fileold.length + " New size: " + $filenew.length
+  write-host $sizeIssue -foreground "red"
   write-host "$(get-date) File size problem, undoing pending changes to messagesgenerated.uar" -foreground "red"
   & $TFSLocation undo $CSMessageArgs | Out-null
 }
