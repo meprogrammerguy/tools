@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Settings>
+	<LoadUCData>
+		<ASNFileDirectory>D:\DBUpdate\Devo_v2\</ASNFileDirectory>
+		<ASNFileName>idf.asn</ASNFileName>
+		<LoadUCDataTool>D:\DBUpdate\Devo_v2\loaducdata.exe</LoadUCDataTool>
+		<LoadUCDataFile>P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql</LoadUCDataFile>
+		<TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
+	</LoadUCData>
+	<Users>
+		<JSmith>
+			<SettingsDirectory>D:\DBUpdate\settings\</SettingsDirectory>
+		</JSmith>
+	</Users>
+</Settings>

@@ -11,29 +11,43 @@ clear
 $script:startTime = Get-Date
 write-host "Script Started at $script:startTime" -foreground "green"
 
-$AsnLocation = "D:\DBUpdate\Devo_v2\"
-$LoadUCDataLocation = $AsnLocation  + "loaducdata.exe"
-$LoadUCDataFile = "P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql"
-$LoadUCDataTempFile = $AsnLocation  + "LoadUCData.sql"
-$LoadUCDataOld = $AsnLocation  + "LoadUCData.old"
-$LoadUCDataASN = $AsnLocation + "idf.asn"
-$LoadUCDataArgs = $LoadUCDataASN + "," + $LoadUCDataFile
+[xml]$ConfigFile = Get-Content DBUpdate.xml
+$OverrideDirectory = $ConfigFile.Settings.Users.$([Environment]::UserName).SettingsDirectory 
+if ($OverrideDirectory -ne "")
+{
+	$OverrideDirectory = $OverrideDirectory + "DBUpdate.xml"
+	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideDirectory
+}
+else
+{
+	write-host "settings from DBUpdate.xml" -foreground "yellow"
+}
+$ASNFileDirectory = $ConfigFile.Settings.LoadUCData.ASNFileDirectory
+$ASNFileFileName = $ConfigFile.Settings.LoadUCData.ASNFileName
+$LoadUCDataTool = $ConfigFile.Settings.LoadUCData.LoadUCDataTool
+$LoadUCDataFile = $ConfigFile.Settings.LoadUCData.LoadUCDataFile
+$TempFileLocation = $ConfigFile.Settings.LoadUCData.TempFileLocation
 
-cd $AsnLocation
+$LoadUCDataOld = $TempFileLocation + "LoadUCData.old"
+$LoadUCDataASN = $ASNFileDirectory + $ASNFileFileName
+$LoadUCDataTempFile = $TempFileLocation + "LoadUCData.sql"
+
+cd $ASNFileDirectory
 Convert-Path .
 If (Test-Path $LoadUCDataOld)
 {
-  write-host "$(get-date) Removing old LoadUCData file" -foreground "green"
+	write-host "$(get-date) Removing old LoadUCData file" -foreground "green"
 	Remove-Item $LoadUCDataOld -force
 }
 If (Test-Path $LoadUCDataFile)
 {
-  write-host "$(get-date) Renaming LoadUCData.sql to LoadUCData.old" -foreground "green"
-  Rename-Item $LoadUCDataFile $LoadUCDataOld
+	write-host "$(get-date) Renaming LoadUCData.sql to LoadUCData.old" -foreground "green"
+	Rename-Item $LoadUCDataFile $LoadUCDataOld
 }
 $itemtime = Get-Date
 write-host "$(get-date) Generating LoadUCData.sql (oracle DB only)" -foreground "green"
-$outputTool = & $LoadUCDataLocation ora, $LoadUCDataASN, $LoadUCDataTempFile
+$outputTool = & $LoadUCDataTool ora, $LoadUCDataASN, $LoadUCDataTempFile
 $outputTool
 if ($outputTool -match "error")
 {
