@@ -19,11 +19,14 @@ $CSMessageArgs = "$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar"
 $CSComponentLocation = "H:\unicomp\CSCE\" + $CSParent + "\" + $CSVersion + "\Components"
 $CSComponentFiles = $CSComponentLocation + "\*.cmx"
 $CSComponentArgs = "$/CSCE/CS06/CS08.2.27/USYS/Components"
+$CSIncludeLocation = "H:\unicomp\CSCE\CS06\CS08.2.27\IncludeProcs"
+$CSIncludeArgs = "$/CSCE/CS06/CS08.2.27/USYS/IncludeProcs"
 $CSModelLocation = "H:\unicomp\CSCE\" + $CSParent + "\" + $CSVersion + "\Models"
 $CSModelArgs = "$/CSCE/CS06/CS08.2.27/USYS/Models"
 $TFSLocation = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe"
 $AsnLocation = "D:\DBUpdate\Devo_v2\"
 $INILocation = "/ini=P:\CS08_2X\CS08_2_27\USERS\MAIN\idf96.ini"
+$ImportIncludes = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\IncludeProcs\*.ipx"
 $ImportComponents = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Components\*.cmx"
 $ImportModels = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml"
 $PatternStart = '<DAT name=\"ULABEL\">'
@@ -135,8 +138,21 @@ write-host "$(get-date) Getting Latest Models" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+cd $CSIncludeLocation
+Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
+& $TFSLocation get $CSIncludeArgs | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
 cd $AsnLocation 
 Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Importing Include Procs" -foreground "green"
+& $UnifaceIDFLocation $INILocation /imp $ImportIncludes | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Importing Components" -foreground "green"
 & $UnifaceIDFLocation $INILocation /imp $ImportComponents | Out-null
