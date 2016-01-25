@@ -9,7 +9,7 @@ function GetElapsedTime([datetime]$starttime)
 }
 clear
 $script:startTime = Get-Date
-write-host "Script Started at $script:startTime" -foreground "green"
+write-host "LoadUCData Script Started at $script:startTime" -foreground "green"
 
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $OverrideDirectory = $ConfigFile.Settings.Users.$([Environment]::UserName).SettingsDirectory 

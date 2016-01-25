@@ -1,5 +1,5 @@
 <#
-    Powershell DBUpdate
+    Powershell GenerateUAR Script
 #>
 clear
 $UnifaceIDFLocation = "T:\UNIFACE\U9605\X505\common\BIN\idf.exe"
@@ -18,6 +18,11 @@ $ResourcesGenerated = "D:\DBUpdate\MessagesGenerated_v2\resources\msg"
 $ZipLocation = "D:\DBUpdate\MessagesGenerated_v2\7za.exe"
 $ZipArgs = "a -tzip "
 $GeneratedLogs = "D:\DBUpdate\MessagesGenerated_v2\Logs\"
+$theServer = "AL-SQL2K8R2-S01"
+$theDB = "Messages2xGenerated"
+$theUser = "ital"
+$thePassword = "ital"
+$theTables = "uobj,ouobj,usource,ousource"
 $CurrentUser = [Environment]::UserName
 function GetElapsedTime([datetime]$starttime) 
 {
@@ -31,7 +36,18 @@ $script:startTime = Get-Date
 [Environment]::UserDomainName
 [Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
-write-host "Script Started at $script:startTime" -foreground "green"
+write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
+
+$Pieces = $theTables.split(",")
+if ($Pieces[0] -gt "")
+{
+  $QueryArray = @()
+	foreach ($Piece in $Pieces)
+	{
+		$Piece = $Piece.ToUpper()
+		$QueryArray = $QueryArray + @("Drop table " + $Piece + ";")
+	}
+}
 
 cd $CSMessageLocation
 Convert-Path .
@@ -41,9 +57,7 @@ if ($LockTest -match "no pending")
   $itemtime = Get-Date
   write-host "$(get-date) Checking out the messagesgenerated.uar file" -foreground "green"
   & $TFSLocation get $CSMessageArgs | Out-null
-<#
   & $TFSLocation checkout $CSMessageArgs | Out-null
-#>
   $LockTest = & $TFSLocation status /user:* /format:detailed $CSMessageArgs | Out-null
 }
 else
@@ -56,9 +70,7 @@ else
   write-host "Script Ended at $(get-date)" -foreground "red"
   $elapsed = GetElapsedTime $script:startTime
   write-host "Total Elapsed Time: " $elapsed;
-<#
   Exit
-#>
 }
 $LockTest
 
@@ -71,6 +83,12 @@ foreach ($file in Get-ChildItem -name)
   {
     Remove-Item $file -force
   } 
+}
+
+write-host "$(get-date) Dropping UOBJ and USOURCE tables" -foreground "green"
+foreach ($Query in $QueryArray)
+{
+  Invoke-Sqlcmd -warningaction 'silentlycontinue' -erroraction 'silentlycontinue' -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
 
 cd $CSModelLocation
@@ -136,10 +154,10 @@ Copy-Item $URRGenerated $CSMessageLocation
 $fileold = Get-Item $CDMessageOld
 $filenew = Get-Item $CDMessageNew
 
-if ($filenew.length -gt $fileold.length)
+cd $CSMessageLocation
+Convert-Path .
+if ($filenew.length -ge $fileold.length)
 {
-  cd $CSMessageLocation
-  Convert-Path .
   $itemtime = Get-Date
   write-host "$(get-date) Checking in messagesgenerated.uar" -foreground "green"
   New-TfsChangeset -Item $CSMessageArgs -Verbose -Comment "Updated from DBUpdate script" -Override false
@@ -148,7 +166,7 @@ if ($filenew.length -gt $fileold.length)
 }
 else
 {
-  $sizeIssue "Old size: " + $fileold.length + " New size: " + $filenew.length
+  $sizeIssue = "Old size: " + $fileold.length + " New size: " + $filenew.length
   write-host $sizeIssue -foreground "red"
   write-host "$(get-date) File size problem, undoing pending changes to messagesgenerated.uar" -foreground "red"
   & $TFSLocation undo $CSMessageArgs | Out-null
