@@ -7,6 +7,29 @@
 		<LoadUCDataFile>P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql</LoadUCDataFile>
 		<TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
 	</LoadUCData>
+  <GenerateUARFile>
+    <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
+    <TFSWorkspace>d:\messages</TFSWorkspace>
+    <MessageArgs>$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar</MessageArgs>
+    <TFSModelPath>H:\unicomp\CSCE\CS06\CS08.2.27\Models</TFSModelPath>
+    <ModelArgs>$/CSCE/CS06/CS08.2.27/USYS/Models</ModelArgs>
+    <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
+    <ImportModels>XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml</ImportModels>
+    <ASNPath>D:\DBUpdate\MessagesGenerated_v2\</ASNPath>
+    <UARGeneratedFile>D:\DBUpdate\MessagesGenerated_v2\messagesgenerated.uar</UARGeneratedFile>
+    <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
+    <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
+    <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>
+    <ZipArgs>a -tzip </ZipArgs>
+    <GeneratedLogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</GeneratedLogPath>
+    <SQLServer>
+      <Server>AL-SQL2K8R2-S01</Server>
+      <Database>Messages2xGenerated</Database>
+      <User>ital</User>
+      <Password>ital</Password>
+      <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
+    </SQLServer>
+  </GenerateUARFile>
 	<Users>
 		<JSmith>
 			<SettingsDirectory>D:\DBUpdate\settings\</SettingsDirectory>
