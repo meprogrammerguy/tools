@@ -1,0 +1,2 @@
+tf get /recursive /preview
+tf status . -r -user * | % { $_.pendingchanges } | ? { $_.islock } | select -unique serveritem
