@@ -1,2 +1,2 @@
-tf get /recursive /preview
+& "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get /preview
 tf status . -r -user * | % { $_.pendingchanges } | ? { $_.islock } | select -unique serveritem
