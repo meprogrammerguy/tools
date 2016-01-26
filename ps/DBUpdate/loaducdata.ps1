@@ -1,6 +1,7 @@
 <#
     Powershell LoadUCData script
 #>
+$Host.UI.RawUI.WindowTitle = "LoadUCData Script"
 function GetElapsedTime([datetime]$starttime) 
 {
     $runtime = $(get-date) - $starttime

@@ -1,6 +1,7 @@
 <#
     Powershell GenerateUAR Script
 #>
+$Host.UI.RawUI.WindowTitle = "GenerateUAR Script"
 function GetElapsedTime([datetime]$starttime) 
 {
     $runtime = $(get-date) - $starttime

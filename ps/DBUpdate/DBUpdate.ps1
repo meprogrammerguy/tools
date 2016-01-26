@@ -63,8 +63,9 @@ $script:startTime = Get-Date
 [Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
-
-cmd /c start powershell -NoExit -Command {$Host.UI.RawUI.WindowTitle = "$($HostName)"; .\GenerateUAR.ps1}
+$HostName = "GenerateUAR script"
+cmd /c start powershell -NoExit -Command {$Host.UI.RawUI.WindowTitle = "$HostName;".\GenerateUAR.ps1}
+exit
 
 $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
@@ -132,11 +133,12 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $PSScriptRoot
 Convert-Path .
+$HostName = "LoadUCData script"
 cmd /c start powershell -NoExit -Command {$Host.UI.RawUI.WindowTitle = "$HostName"; .\LoadUCData.ps1}
 
 cd $AsnLocation 
 Convert-Path .
-write-host "$(get-date) Generating R, S and Y messages (in parallel)" -foreground "blue"
+write-host "$(get-date) Generating R, S and Y messages (in parallel)" -foreground "magenta"
 & $UnifaceIDFLocation $INILocation /tst gen_messages.aps RSY
 
 if ($Patterns.Count -le 0)

@@ -31,8 +31,8 @@
     </SQLServer>
   </GenerateUARFile>
 	<Users>
-		<JSmith>
+		<JSmithtest>
 			<SettingsDirectory>D:\DBUpdate\settings\</SettingsDirectory>
-		</JSmith>
+		</JSmithtest>
 	</Users>
 </Settings>
