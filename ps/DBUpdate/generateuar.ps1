@@ -31,7 +31,7 @@ else
 {
 	write-host "settings from DBUpdate.xml" -foreground "yellow"
 }
-$UnifaceIDFPath = $ConfigFile.Settings.GenerateUARFile.UnifaceIDFPath
+$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 $TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspace
 $MessageOld = $TFSWorkspace + "\messagesgenerated.old"
 $MessageNew =  $TFSWorkspace + "\messagesgenerated.uar"
@@ -46,7 +46,7 @@ $INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 $ZipArgs = $ConfigFile.Settings.GenerateUARFile.ZipArgs
-$GeneratedLogPath = $ConfigFile.Settings.GenerateUARFile.GeneratedLogPath
+$LogPath = $ConfigFile.Settings.GenerateUARFile.LogPath
 
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
 $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database
@@ -91,7 +91,7 @@ else
 }
 $LockTest
 
-cd $GeneratedLogPath
+cd $LogPath
 Convert-Path .
 write-host "$(get-date) Removing old uniface log files" -foreground "green"
 foreach ($file in Get-ChildItem -name)

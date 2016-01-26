@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <Settings>
+  <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
+  <DBUpdate>
+      <LogPath>D:\DBUpdate\Devo_v2\Logs\</LogPath>
+  </DBUpdate>
 	<LoadUCData>
 		<ASNFileDirectory>D:\DBUpdate\Devo_v2\</ASNFileDirectory>
 		<ASNFileName>idf.asn</ASNFileName>
@@ -8,7 +12,6 @@
 		<TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
 	</LoadUCData>
   <GenerateUARFile>
-    <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
     <TFSWorkspace>d:\messages</TFSWorkspace>
     <MessageArgs>$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar</MessageArgs>
     <TFSModelPath>H:\unicomp\CSCE\CS06\CS08.2.27\Models</TFSModelPath>
@@ -21,7 +24,7 @@
     <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>
     <ZipArgs>a -tzip </ZipArgs>
-    <GeneratedLogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</GeneratedLogPath>
+    <LogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</LogPath>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
       <Database>Messages2xGenerated</Database>

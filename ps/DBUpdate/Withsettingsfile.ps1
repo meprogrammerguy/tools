@@ -22,14 +22,21 @@ else
 {
 	write-host "settings from DBUpdate.xml" -foreground "yellow"
 }
-$CSPrompt = $CSVersion + 'DBUpdate script - Table(s) ordr,schl or (<cr>=all[slow])'
+$LogPath = $ConfigFile.Settings.DBUpdate.LogPath
+$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+$CSPrompt = 'DBUpdate script - Table(s) ordr,schl or (<cr>=all[slow])'
+<#
 $Tables = Read-Host -Prompt $CSPrompt
+#>
 $script:startTime = Get-Date
 $CurrentUser
 [Environment]::UserDomainName
 [Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
+
+$LogPath
+$UnifaceIDFPath
 
 cd $PSScriptRoot
 Convert-Path .
@@ -53,7 +60,7 @@ if ($Pieces[0] -gt "")
 	}
 }
 
-cd $DevoLogs
+cd $LogPath
 Convert-Path .
 write-host "$(get-date) Removing old log files" -foreground "green"
 foreach ($file in Get-ChildItem -name)
