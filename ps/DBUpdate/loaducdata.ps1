@@ -42,8 +42,8 @@ If (Test-Path $LoadUCDataOld)
 }
 If (Test-Path $LoadUCDataFile)
 {
-	write-host "$(get-date) Renaming LoadUCData.sql to LoadUCData.old" -foreground "green"
-	Rename-Item $LoadUCDataFile $LoadUCDataOld
+	write-host "$(get-date) Copying LoadUCData.sql to LoadUCData.old" -foreground "green"
+  Copy-Item -Path $LoadUCDataFile -Destination $LoadUCDataOld -Force
 }
 $itemtime = Get-Date
 write-host "$(get-date) Generating LoadUCData.sql (oracle DB only)" -foreground "green"

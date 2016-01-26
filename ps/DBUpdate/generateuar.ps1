@@ -66,6 +66,7 @@ if ($Pieces[0] -gt "")
 
 cd $TFSWorkspace
 Convert-Path .
+
 $LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs
 if ($LockTest -match "no pending")
 {
@@ -100,10 +101,11 @@ foreach ($file in Get-ChildItem -name)
   } 
 }
 
-write-host "$(get-date) Dropping UOBJ and USOURCE tables" -foreground "green"
+write-host "$(get-date) Dropping tables" -foreground "green"
 foreach ($Query in $QueryArray)
 {
-  Invoke-Sqlcmd -warningaction 'silentlycontinue' -erroraction 'silentlycontinue' -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
+  write-host "$(get-date) $($Query)" -foreground "green"
+  Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
 
 cd $TFSModelPath
@@ -175,7 +177,7 @@ if ($filenew.length -ge $fileold.length)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Checking in messagesgenerated.uar" -foreground "green"
-  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script" -Override false
+  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script"
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
