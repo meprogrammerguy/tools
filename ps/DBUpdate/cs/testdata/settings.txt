@@ -1,0 +1,15 @@
+P:\CS08_2X\CS08_2_27\USERS\MAIN\idf.asn
+P:\CS08_2X\MessagesGenerated\USERS\MAIN\idf.asn
+==
+D:\DBUpdate\Devo_v2\idf.asn
+D:\DBUpdate\MessagesGenerated_v2\idf.asn
+"H:\\Unicomp\\CSCE\\CS06\\CS08.2.27\\Components"
+==
+"D:\\tfs\\DBWizApp\\WindowsFormsApplication1\\bin\\Debug\\LOADUCDATA.SQL"
+"Data Source= ALORADEVS00;User Id=CS08_2_27_REP;Password= CS08_2_27_REP;"
+// UCFIELD queries
+"select count(f.u_flab) FROM ucfield f, uctable t WHERE f.u_vlab = t.u_vlab AND f.u_tlab = t.u_tlab and f.u_vlab in ('CMDSERIES','PRINTER', 'CARTAGE_INVOICE') and f.u_tlab not like 'X%' and f.u_indb = 'Y'"
+"select            f.*  FROM ucfield f, uctable t WHERE f.u_vlab = t.u_vlab AND f.u_tlab = t.u_tlab and f.u_vlab in ('CMDSERIES','PRINTER', 'CARTAGE_INVOICE') and f.u_tlab not like 'X%' and f.u_indb = 'Y' order by f.u_vlab, f.u_tlab, f.u_fseq"
+//UCKEY Queries
+"select count(t.u_tlab) FROM uckey k, uctable t WHERE k.u_vlab = t.u_vlab AND k.u_tlab = t.u_tlab and k.u_vlab in ('CMDSERIES','PRINTER', 'CARTAGE_INVOICE') and k.u_tlab not like 'X%'"
+"select            k.*  FROM uckey k, uctable t WHERE k.u_vlab = t.u_vlab AND k.u_tlab = t.u_tlab and k.u_vlab in ('CMDSERIES','PRINTER', 'CARTAGE_INVOICE') and k.u_tlab not like 'X%' order by k.u_vlab, k.u_tlab, k.u_kseq"
