@@ -1,0 +1,26 @@
+﻿; ***********************DO NOT DELETE THIS LINE*********************
+#FILE p:\CS08_2X\CS08_2_27\USERS\MAIN\CENTRAL_STAND_IDF.ASN
+
+[SETTINGS]
+$PUTMESS_LOGFILE = D:\DBUpdate\Devo_v2\Logs\%p_%u_putmess.TXT /append
+$TRANSCRIPT_LOGFILE = D:\DBUpdate\Devo_v2\Logs\%p_%u_transcript.TXT /append
+
+[PATHS]
+$ORA_REP = ORA:ALORADEVS00|CS08_2_27_REP|CS08_2_27_REP
+$ORA_DAT = ORA:ALORADEVS00|CS08_2_27_CMD_DAT|CS08_2_27_CMD_DAT
+$DEF = $ORA_DAT
+$IDF = $ORA_REP
+$SYS = $ORA_REP
+$UUU = $ORA_REP
+
+[DRIVER_SETTINGS]
+ORA = U6.3
+usys$ora_params = open cursors 200,dpa,fv
+
+[FILES]
+
+
+
+
+
+
