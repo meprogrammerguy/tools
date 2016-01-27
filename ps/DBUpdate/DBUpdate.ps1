@@ -1,72 +1,71 @@
 <#
-    Powershell CompileForms
+    Powershell DBUpdate script
 #>
+$Host.UI.RawUI.WindowTitle = "DBUpdate Script"
 clear
-$CSVersion = "CS08.2.27"
-$UnifaceIDFLocation = "T:\UNIFACE\U9605\X505\common\BIN\idf.exe"
-$UnifaceININame = "idf96.ini"
-$pieces = $CSVersion.split(".")
-$CSPrefix = $pieces[0]
-$CSVersionMajor = $pieces[1]
-$CSVersionMinor = $pieces[2]
-$CSParent = "CS06"
-if ($CSVersionMajor -ne "2")
-{
-  $CSParent = "CSPV6"
-}
-$CSMessageLocation = "d:\messages"
-$CSMessageArgs = "$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar" 
-$CSComponentLocation = "H:\unicomp\CSCE\" + $CSParent + "\" + $CSVersion + "\Components"
-$CSComponentFiles = $CSComponentLocation + "\*.cmx"
-$CSComponentArgs = "$/CSCE/CS06/CS08.2.27/USYS/Components"
-$CSIncludeLocation = "H:\unicomp\CSCE\CS06\CS08.2.27\IncludeProcs"
-$CSIncludeArgs = "$/CSCE/CS06/CS08.2.27/USYS/IncludeProcs"
-$CSModelLocation = "H:\unicomp\CSCE\" + $CSParent + "\" + $CSVersion + "\Models"
-$CSModelArgs = "$/CSCE/CS06/CS08.2.27/USYS/Models"
-$TFSLocation = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe"
-$AsnLocation = "D:\DBUpdate\Devo_v2\"
-$INILocation = "/ini=P:\CS08_2X\CS08_2_27\USERS\MAIN\idf96.ini"
-$ImportIncludes = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\IncludeProcs\*.ipx"
-$ImportAllComponents = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Components\*.cmx"
-$ImportComponent = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Components"
-$ImportModels = "XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml"
-$PatternStart = '<DAT name=\"ULABEL\">'
-$PatternEnd = "</DAT>"
-$AsnGenerated = "D:\DBUpdate\MessagesGenerated_v2\"
-$URRGenerated = "D:\DBUpdate\MessagesGenerated_v2\messagesgenerated.uar"
-$INIGenerated = "/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini"
-$ResourcesGenerated = "D:\DBUpdate\MessagesGenerated_v2\resources\msg"
-$ZipLocation = "D:\DBUpdate\MessagesGenerated_v2\7za.exe"
-$ZipArgs = "a -tzip "
-$DevoLogs = "D:\DBUpdate\Devo_v2\Logs\"
-$GeneratedLogs = "D:\DBUpdate\MessagesGenerated_v2\Logs\"
-$CurrentUser = [Environment]::UserName
-$CSPrompt = $CSVersion + ' DBUpdate script - Table(s) ordr,schl or (<cr>=all[slow])'
-$LoadUCDataLocation = $AsnLocation  + "loaducdata.exe"
-$LoadUCDataFile = "P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql"
-$LoadUCDataTempFile = $AsnLocation  + "LoadUCData.sql"
-$LoadUCDataOld = $AsnLocation  + "LoadUCData.old"
-$LoadUCDataASN = $AsnLocation + "idf.asn"
-$LoadUCDataArgs = $LoadUCDataASN + "," + $LoadUCDataFile
 function GetElapsedTime([datetime]$starttime) 
 {
     $runtime = $(get-date) - $starttime
     $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
     $retStr
 }
+$CurrentUser = [Environment]::UserName
+[xml]$ConfigFile = Get-Content DBUpdate.xml
+$OverrideDirectory = $ConfigFile.Settings.Users.$($CurrentUser).SettingsDirectory 
+if ($OverrideDirectory -ne "")
+{
+	$OverrideDirectory = $OverrideDirectory + "DBUpdate.xml"
+	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideDirectory
+}
+else
+{
+	write-host "settings from DBUpdate.xml" -foreground "yellow"
+}
 
-$Tables = Read-Host -Prompt $CSPrompt
+<#
+    Global config settings
+#>
+$TFSToolPath = $ConfigFile.Settings.TFSToolPath
+$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+$ASNCorePath = $ConfigFile.Settings.ASNCorePath
+$INICorePath = $ConfigFile.Settings.INICorePath
+$TFSIncludePath = $ConfigFile.Settings.TFSIncludePath
+$IncludeArgs = $ConfigFile.Settings.IncludeArgs
+$ImportIncludes = $ConfigFile.Settings.ImportIncludes
+
+$TFSModelPath = $ConfigFile.Settings.TFSModelPath
+$ModelArgs = $ConfigFile.Settings.ModelArgs
+$ImportModels = $ConfigFile.Settings.ImportModels
+
+$TFSComponentPath = $ConfigFile.Settings.TFSComponentPath
+$ComponentFiles = $TFSComponentPath + "\*.cmx"
+$ComponentArgs = $ConfigFile.Settings.ComponentArgs
+$ImportComponent = $ConfigFile.Settings.ImportComponent
+$ImportAllComponents = $ImportComponent + "\*.cmx"
+
+<#
+    This script's config settings
+#>
+$LogPath = $ConfigFile.Settings.DBUpdate.LogPath
+$ModelPrompt = $ConfigFile.Settings.DBUpdate.ModelPrompt
+
+<#
+    This script's model table(s) input
+#>
+$Tables = Read-Host -Prompt $ModelPrompt
 
 $script:startTime = Get-Date
-[Environment]::UserName
+$CurrentUser
 [Environment]::UserDomainName
 [Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
-$HostName = "GenerateUAR script"
-cmd /c start powershell -NoExit -Command {$Host.UI.RawUI.WindowTitle = "$HostName;".\GenerateUAR.ps1}
-exit
 
+cmd /c start powershell -NoExit -Command {.\GenerateUAR.ps1}
+
+$PatternStart = '<DAT name=\"ULABEL\">'
+$PatternEnd = "</DAT>"
 $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
 {
@@ -78,7 +77,7 @@ if ($Pieces[0] -gt "")
 	}
 }
 
-cd $DevoLogs
+cd $LogPath
 Convert-Path .
 write-host "$(get-date) Removing old log files" -foreground "green"
 foreach ($file in Get-ChildItem -name)
@@ -89,80 +88,79 @@ foreach ($file in Get-ChildItem -name)
   } 
 }
 
-cd $CSComponentLocation
+cd $TFSComponentPath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Components" -foreground "green"
-& $TFSLocation get $CSComponentArgs | Out-null
+& $TFSToolPath get $ComponentArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
-cd $CSModelLocation
+cd $TFSModelPath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Models" -foreground "green"
-& $TFSLocation get $CSModelArgs | Out-null
+& $TFSToolPath get $ModelArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
-cd $CSIncludeLocation
+cd $TFSIncludePath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
-& $TFSLocation get $CSIncludeArgs | Out-null
+& $TFSToolPath get $IncludeArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
-cd $AsnLocation 
+cd $ASNCorePath 
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Importing Include Procs" -foreground "green"
-& $UnifaceIDFLocation $INILocation /imp $ImportIncludes | Out-null
+& $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
-& $UnifaceIDFLocation $INILocation /imp $ImportModels | Out-null
+& $UnifaceIDFPath $INICorePath /imp $ImportModels | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Analyizing Models" -foreground "green"
-& $UnifaceIDFLocation $INILocation /con | Out-null
+& $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $PSScriptRoot
 Convert-Path .
-$HostName = "LoadUCData script"
-cmd /c start powershell -NoExit -Command {$Host.UI.RawUI.WindowTitle = "$HostName"; .\LoadUCData.ps1}
+cmd /c start powershell -NoExit -Command {.\LoadUCData.ps1}
 
-cd $AsnLocation 
+cd $ASNCorePath 
 Convert-Path .
 write-host "$(get-date) Generating R, S and Y messages (in parallel)" -foreground "magenta"
-& $UnifaceIDFLocation $INILocation /tst gen_messages.aps RSY
+& $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY
 
 if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Importing Components" -foreground "green"
-  & $UnifaceIDFLocation $INILocation /imp $ImportAllComponents | Out-null
+  & $UnifaceIDFPath $INICorePath /imp $ImportAllComponents | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceIDFLocation $INILocation /svc /inf | Out-null
+	& $UnifaceIDFPath $INICorePath /svc /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Forms" -foreground "green"
-	& $UnifaceIDFLocation $INILocation /frm /inf | Out-null
+	& $UnifaceIDFPath $INICorePath /frm /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
 else
 {
   $itemtime = Get-Date
-	foreach ($file in Get-ChildItem -Path $CSComponentFiles | Select-String -pattern $Patterns | Select-Object -Unique path)
+	foreach ($file in Get-ChildItem -Path $ComponentFiles | Select-String -pattern $Patterns | Select-Object -Unique path)
 	{
 		$filespec = $file.path
 		$pieces = $filespec.split("\")
@@ -170,9 +168,9 @@ else
 		$pieces = $filename.split(".")
 		$justname = $pieces[$pieces.count - 2]
     write-host "$(get-date) Importing $justname" -foreground "green"
-    & $UnifaceIDFLocation $INILocation /imp $ImportComponent\$justname.cmx | Out-null
+    & $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
 		write-host "$(get-date) Compiling $justname" -foreground "green"
-		& $UnifaceIDFLocation $INILocation /cpt /inf $justname | Out-null
+		& $UnifaceIDFPath $INICorePath /cpt /inf $justname | Out-null
 	}
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"

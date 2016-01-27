@@ -31,16 +31,24 @@ else
 {
 	write-host "settings from DBUpdate.xml" -foreground "yellow"
 }
+
+<#
+    Global config settings
+#>
+$TFSToolPath = $ConfigFile.Settings.TFSToolPath
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+$TFSModelPath = $ConfigFile.Settings.TFSModelPath
+$ModelArgs = $ConfigFile.Settings.ModelArgs
+$ImportModels = $ConfigFile.Settings.ImportModels
+
+<#
+    This script's config settings
+#>
 $TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspace
 $MessageOld = $TFSWorkspace + "\messagesgenerated.old"
 $MessageNew =  $TFSWorkspace + "\messagesgenerated.uar"
 $MessageArgs = $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$TFSModelPath = $ConfigFile.Settings.GenerateUARFile.TFSModelPath
-$ModelArgs = $ConfigFile.Settings.GenerateUARFile.ModelArgs
-$TFSToolPath = $ConfigFile.Settings.GenerateUARFile.TFSToolPath
-$ImportModels = $ConfigFile.Settings.GenerateUARFile.ImportModels
-$ASNPath = $ConfigFile.Settings.GenerateUARFile.ASNPath
+$ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
 $UARGeneratedFile = $ConfigFile.Settings.GenerateUARFile.UARGeneratedFile
 $INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
@@ -67,7 +75,6 @@ if ($Pieces[0] -gt "")
 
 cd $TFSWorkspace
 Convert-Path .
-
 $LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs
 if ($LockTest -match "no pending")
 {
@@ -103,11 +110,13 @@ foreach ($file in Get-ChildItem -name)
 }
 
 write-host "$(get-date) Dropping tables" -foreground "green"
+$WarningPreference = 'SilentlyContinue'
 foreach ($Query in $QueryArray)
 {
   write-host "$(get-date) $($Query)" -foreground "green"
   Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
+$WarningPreference = 'Continue'
 
 cd $TFSModelPath
 Convert-Path .
@@ -117,7 +126,7 @@ write-host "$(get-date) Getting Latest Models" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
-cd $ASNPath
+cd $ASNMessagePath
 Convert-Path .
 If (Test-Path $UARGeneratedFile)
 {

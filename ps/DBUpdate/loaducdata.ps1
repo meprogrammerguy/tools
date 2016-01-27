@@ -24,17 +24,24 @@ else
 {
 	write-host "settings from DBUpdate.xml" -foreground "yellow"
 }
-$ASNFileDirectory = $ConfigFile.Settings.LoadUCData.ASNFileDirectory
-$ASNFileFileName = $ConfigFile.Settings.LoadUCData.ASNFileName
-$LoadUCDataTool = $ConfigFile.Settings.LoadUCData.LoadUCDataTool
+
+<#
+    Global config settings
+#>
+$ASNCorePath = $ConfigFile.Settings.ASNCorePath
+
+<#
+    This script's config settings
+#>
+$ASNFileName = $ConfigFile.Settings.LoadUCData.ASNFileName
+$Tool = $ConfigFile.Settings.LoadUCData.Tool
 $LoadUCDataFile = $ConfigFile.Settings.LoadUCData.LoadUCDataFile
 $TempFileLocation = $ConfigFile.Settings.LoadUCData.TempFileLocation
-
 $LoadUCDataOld = $TempFileLocation + "LoadUCData.old"
-$LoadUCDataASN = $ASNFileDirectory + $ASNFileFileName
+$LoadUCDataASN = $ASNCorePath + $ASNFileName
 $LoadUCDataTempFile = $TempFileLocation + "LoadUCData.sql"
 
-cd $ASNFileDirectory
+cd $ASNCorePath
 Convert-Path .
 If (Test-Path $LoadUCDataOld)
 {
@@ -48,7 +55,7 @@ If (Test-Path $LoadUCDataFile)
 }
 $itemtime = Get-Date
 write-host "$(get-date) Generating LoadUCData.sql (oracle DB only)" -foreground "green"
-$outputTool = & $LoadUCDataTool ora, $LoadUCDataASN, $LoadUCDataTempFile
+$outputTool = & $Tool ora, $LoadUCDataASN, $LoadUCDataTempFile
 $outputTool
 if ($outputTool -match "error")
 {
