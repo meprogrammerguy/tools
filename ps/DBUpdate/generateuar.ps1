@@ -114,7 +114,7 @@ $WarningPreference = 'SilentlyContinue'
 foreach ($Query in $QueryArray)
 {
   write-host "$(get-date) $($Query)" -foreground "green"
-  $HideCrap = Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
+  Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
 $WarningPreference = 'Continue'
 
