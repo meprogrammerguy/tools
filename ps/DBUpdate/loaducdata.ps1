@@ -29,6 +29,7 @@ else
     Global config settings
 #>
 $ASNCorePath = $ConfigFile.Settings.ASNCorePath
+$TempFileLocation = $ConfigFile.Settings.TempFileLocation
 
 <#
     This script's config settings
@@ -36,7 +37,6 @@ $ASNCorePath = $ConfigFile.Settings.ASNCorePath
 $ASNFileName = $ConfigFile.Settings.LoadUCData.ASNFileName
 $Tool = $ConfigFile.Settings.LoadUCData.Tool
 $LoadUCDataFile = $ConfigFile.Settings.LoadUCData.LoadUCDataFile
-$TempFileLocation = $ConfigFile.Settings.LoadUCData.TempFileLocation
 $LoadUCDataOld = $TempFileLocation + "LoadUCData.old"
 $LoadUCDataASN = $ASNCorePath + $ASNFileName
 $LoadUCDataTempFile = $TempFileLocation + "LoadUCData.sql"

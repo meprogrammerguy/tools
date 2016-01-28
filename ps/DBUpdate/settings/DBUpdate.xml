@@ -17,21 +17,20 @@
   
   <ASNCorePath>D:\DBUpdate\Devo_v2\</ASNCorePath>
   <INICorePath>/ini=P:\CS08_2X\CS08_2_27\USERS\MAIN\idf96.ini</INICorePath>
+  <TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
   <DBUpdate>
       <LogPath>D:\DBUpdate\Devo_v2\Logs\</LogPath>
       <ModelPrompt>DBUpdate script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
   </DBUpdate>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>C:\Users\jsmith\Documents\GitHub\tools\ps\DBUpdate\cs\LoadUCDATA\bin\Release\LoadUCData.exe</Tool>
+		<Tool>D:\DBUpdate\Devo_v2\LoadUCData.exe</Tool>
 		<LoadUCDataFile>P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql</LoadUCDataFile>
-		<TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
 	</LoadUCData>
   <GenerateUARFile>
     <TFSWorkspace>d:\messages</TFSWorkspace>
     <MessageArgs>$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>D:\DBUpdate\MessagesGenerated_v2\</ASNMessagePath>
-    <UARGeneratedFile>D:\DBUpdate\MessagesGenerated_v2\messagesgenerated.uar</UARGeneratedFile>
     <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
     <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>

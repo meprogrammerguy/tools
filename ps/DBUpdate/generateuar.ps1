@@ -40,16 +40,16 @@ $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 $TFSModelPath = $ConfigFile.Settings.TFSModelPath
 $ModelArgs = $ConfigFile.Settings.ModelArgs
 $ImportModels = $ConfigFile.Settings.ImportModels
+$TempFileLocation = $ConfigFile.Settings.TempFileLocation
 
 <#
     This script's config settings
 #>
 $TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspace
-$MessageOld = $TFSWorkspace + "\messagesgenerated.old"
-$MessageNew =  $TFSWorkspace + "\messagesgenerated.uar"
+$MessageOld = $TempFileLocation + "\messagesgenerated.old"
+$MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = $ConfigFile.Settings.GenerateUARFile.MessageArgs
 $ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
-$UARGeneratedFile = $ConfigFile.Settings.GenerateUARFile.UARGeneratedFile
 $INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
@@ -128,14 +128,16 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $ASNMessagePath
 Convert-Path .
-If (Test-Path $UARGeneratedFile)
+If (Test-Path $MessageOld)
 {
   $itemtime = Get-Date
-  write-host "$(get-date) Removing old UAR file" -foreground "green"
-	Remove-Item $UARGeneratedFile -force
+  write-host "$(get-date) Removing old backup UAR file" -foreground "green"
+	Remove-Item $MessageOld -force
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
+write-host "$(get-date) Copying messagesgenerated.uar to messagesgenerated.old" -foreground "green"
+Copy-Item $TFSWorkspace\messagesgenerated.uar $MessageOld
 
 If (Test-Path $ResourcesGenerated)
 {
@@ -166,18 +168,12 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Generating UAR file" -foreground "green"
-& $ZipLocation a -tzip $UARGeneratedFile $ResourcesGenerated\ | Out-null
+& $ZipLocation a -tzip $MessageNew $ResourcesGenerated\ | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
-If (Test-Path $MessageOld)
-{
-  write-host "$(get-date) Removing old UAR backup file" -foreground "green"
-	Remove-Item $MessageOld -force
-}
-write-host "$(get-date) Renaming messagesgenerated.uar to messagesgenerated.old" -foreground "green"
-Rename-Item $MessageNew messagesgenerated.old
+
 write-host "$(get-date) Copying new messagesgenerated.uar to TFS checkin directory" -foreground "green"
-Copy-Item $UARGeneratedFile $TFSWorkspace
+Copy-Item $MessageNew $TFSWorkspace -force
 $fileold = Get-Item $MessageOld
 $filenew = Get-Item $MessageNew
 
