@@ -61,6 +61,8 @@ $CurrentUser
 [Environment]::MachineName
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
+write-host "$ModelPrompt $Tables" -foreground "green"
+
 
 cmd /c start powershell -NoExit -Command {.\GenerateUAR.ps1}
 

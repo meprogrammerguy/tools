@@ -114,7 +114,7 @@ $WarningPreference = 'SilentlyContinue'
 foreach ($Query in $QueryArray)
 {
   write-host "$(get-date) $($Query)" -foreground "green"
-  Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
+  $HideCrap = Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
 $WarningPreference = 'Continue'
 
@@ -187,7 +187,7 @@ if ($filenew.length -ge $fileold.length)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Checking in messagesgenerated.uar" -foreground "green"
-  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script"
+  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script" | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
