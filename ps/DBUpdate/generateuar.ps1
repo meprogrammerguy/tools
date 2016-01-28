@@ -53,7 +53,6 @@ $ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
 $INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
-$ZipArgs = $ConfigFile.Settings.GenerateUARFile.ZipArgs
 $LogPath = $ConfigFile.Settings.GenerateUARFile.LogPath
 
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server

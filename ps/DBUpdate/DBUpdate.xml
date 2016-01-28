@@ -34,7 +34,6 @@
     <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
     <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>
-    <ZipArgs>a -tzip </ZipArgs>
     <LogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</LogPath>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
