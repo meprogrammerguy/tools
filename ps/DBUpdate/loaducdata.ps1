@@ -78,6 +78,6 @@ else
 cd $PSScriptRoot
 Convert-Path .
 $elapsed = GetElapsedTime $script:startTime
-write-host "Total Elapsed Time: " $elapsed; -foreground "green"
+write-host "Total Elapsed Time: " $elapsed;
 write-host "Script Ended at $(get-date)" -foreground "green"
 

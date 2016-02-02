@@ -35,12 +35,12 @@ else
 <#
     Global config settings
 #>
+$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
 $TFSModelPath = $ConfigFile.Settings.TFSModelPath
 $ModelArgs = $ConfigFile.Settings.ModelArgs
 $ImportModels = $ConfigFile.Settings.ImportModels
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
-$UnifaceLocalIDFPath = $TempFileLocation + "idf.exe"
 
 <#
     This script's config settings
@@ -149,19 +149,19 @@ If (Test-Path $ResourcesGenerated)
 
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
-& $UnifaceLocalIDFPath $INIGenerated /imp $ImportModels | Out-null
+& $UnifaceIDFPath $INIGenerated /imp $ImportModels | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Analyizing Models" -foreground "green"
-& $UnifaceLocalIDFPath $INIGenerated /con | Out-null
+& $UnifaceIDFPath $INIGenerated /con | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
-& $UnifaceLocalIDFPath $INIGenerated /tst gen_messages.aps RSY | Out-null
+& $UnifaceIDFPath $INIGenerated /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
@@ -197,6 +197,6 @@ else
 cd $PSScriptRoot
 Convert-Path .
 $elapsed = GetElapsedTime $script:startTime
-write-host "Total Elapsed Time: " $elapsed; -foreground "green"
+write-host "Total Elapsed Time: " $elapsed;
 write-host "Script Ended at $(get-date)" -foreground "green"
 

@@ -29,7 +29,6 @@ else
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
-$UnifaceLocalIDFPath = $TempFileLocation + "idf.exe"
 $ASNCorePath = $ConfigFile.Settings.ASNCorePath
 $INICorePath = $ConfigFile.Settings.INICorePath
 $TFSIncludePath = $ConfigFile.Settings.TFSIncludePath
@@ -64,8 +63,6 @@ $CurrentUser
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 write-host "Script Started at $script:startTime" -foreground "green"
 write-host "$ModelPrompt $Tables" -foreground "green"
-
-write-host "$(get-date) Copying idf.exe to TempFileLocation to avoid elevated privs" -foreground "yellow"
 
 cmd /c start powershell -NoExit -Command {.\GenerateUAR.ps1}
 
@@ -121,17 +118,17 @@ cd $ASNCorePath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Importing Include Procs" -foreground "green"
-& $UnifaceLocalIDFPath $INICorePath /imp $ImportIncludes | Out-null
+& $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
-& $UnifaceLocalIDFPath $INICorePath /imp $ImportModels | Out-null
+& $UnifaceIDFPath $INICorePath /imp $ImportModels | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Analyizing Models" -foreground "green"
-& $UnifaceLocalIDFPath $INICorePath /con | Out-null
+& $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
@@ -141,24 +138,24 @@ cmd /c start powershell -NoExit -Command {.\LoadUCData.ps1}
 
 cd $ASNCorePath 
 Convert-Path .
-write-host "$(get-date) Generating R, S and Y messages (in parallel)" -foreground "magenta"
-& $UnifaceLocalIDFPath $INICorePath /tst gen_messages.aps RSY
+write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
+& $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
 
 if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Importing Components" -foreground "green"
-  & $UnifaceLocalIDFPath $INICorePath /imp $ImportAllComponents | Out-null
+  & $UnifaceIDFPath $INICorePath /imp $ImportAllComponents | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceLocalIDFPath $INICorePath /svc /inf | Out-null
+	& $UnifaceIDFPath $INICorePath /svc /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Forms" -foreground "green"
-	& $UnifaceLocalIDFPath $INICorePath /frm /inf | Out-null
+	& $UnifaceIDFPath $INICorePath /frm /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
@@ -173,9 +170,9 @@ else
 		$pieces = $filename.split(".")
 		$justname = $pieces[$pieces.count - 2]
     write-host "$(get-date) Importing $justname" -foreground "green"
-    & $UnifaceLocalIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
+    & $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
 		write-host "$(get-date) Compiling $justname" -foreground "green"
-		& $UnifaceLocalIDFPath $INICorePath /cpt /inf $justname
+		& $UnifaceIDFPath $INICorePath /cpt /inf $justname
 	}
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
@@ -184,6 +181,6 @@ else
 cd $PSScriptRoot
 Convert-Path .
 $elapsed = GetElapsedTime $script:startTime
-write-host "Total Elapsed Time: " $elapsed; -foreground "green"
+write-host "Total Elapsed Time: " $elapsed;
 write-host "Script Ended at $(get-date)" -foreground "green"
 
