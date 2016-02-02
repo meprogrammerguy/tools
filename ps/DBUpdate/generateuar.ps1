@@ -36,11 +36,11 @@ else
     Global config settings
 #>
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
-$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 $TFSModelPath = $ConfigFile.Settings.TFSModelPath
 $ModelArgs = $ConfigFile.Settings.ModelArgs
 $ImportModels = $ConfigFile.Settings.ImportModels
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
+$UnifaceLocalIDFPath = $TempFileLocation + "idf.exe"
 
 <#
     This script's config settings
@@ -149,19 +149,19 @@ If (Test-Path $ResourcesGenerated)
 
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /imp $ImportModels | Out-null
+& $UnifaceLocalIDFPath $INIGenerated /imp $ImportModels | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Analyizing Models" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /con | Out-null
+& $UnifaceLocalIDFPath $INIGenerated /con | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /tst gen_messages.aps RSY | Out-null
+& $UnifaceLocalIDFPath $INIGenerated /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
@@ -182,7 +182,7 @@ if ($filenew.length -ge $fileold.length)
 {
   $itemtime = Get-Date
   write-host "$(get-date) Checking in messagesgenerated.uar" -foreground "green"
-  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script" | Out-null
+  New-TfsChangeset -Item $MessageArgs -Verbose -Comment "Updated from DBUpdate script"
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
@@ -196,6 +196,7 @@ else
 
 cd $PSScriptRoot
 Convert-Path .
-write-host "Script Ended at $(get-date)" -foreground "green"
 $elapsed = GetElapsedTime $script:startTime
-write-host "Total Elapsed Time: " $elapsed;
+write-host "Total Elapsed Time: " $elapsed; -foreground "green"
+write-host "Script Ended at $(get-date)" -foreground "green"
+
