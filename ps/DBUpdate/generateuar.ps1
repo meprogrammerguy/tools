@@ -5,9 +5,9 @@ $Host.UI.RawUI.WindowTitle = "GenerateUAR Script (elevated)"
 cd $PSScriptRoot
 function GetElapsedTime([datetime]$starttime) 
 {
-    $runtime = $(get-date) - $starttime
-    $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
-    $retStr
+  $runtime = $(get-date) - $starttime
+  $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
+  $retStr
 }
 clear
 $script:startTime = Get-Date
