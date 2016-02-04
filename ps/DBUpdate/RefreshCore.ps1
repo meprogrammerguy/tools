@@ -49,8 +49,8 @@ $ImportAllComponents = $ImportComponent + "\*.cmx"
 <#
     This script's config settings
 #>
-$LogPath = $ConfigFile.Settings.DBUpdate.LogPath
-$ModelPrompt = $ConfigFile.Settings.DBUpdate.ModelPrompt
+$LogPath = $ConfigFile.Settings.RefreshCore.LogPath
+$ModelPrompt = $ConfigFile.Settings.RefreshCore.ModelPrompt
 
 <#
     This script's model table(s) input
