@@ -6,9 +6,9 @@ cd $PSScriptRoot
 clear
 function GetElapsedTime([datetime]$starttime) 
 {
-    $runtime = $(get-date) - $starttime
-    $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
-    $retStr
+  $runtime = $(get-date) - $starttime
+  $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
+  $retStr
 }
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
@@ -160,7 +160,7 @@ if ($Patterns.Count -le 0)
 }
 else
 {
-  $itemtime = Get-Date
+	$itemtime = Get-Date
 	foreach ($file in Get-ChildItem -Path $ComponentFiles | Select-String -pattern $Patterns | Select-Object -Unique path)
 	{
 		$filespec = $file.path
@@ -168,13 +168,13 @@ else
 		$filename = $pieces[$pieces.count - 1]
 		$pieces = $filename.split(".")
 		$justname = $pieces[$pieces.count - 2]
-    write-host "$(get-date) Importing $justname" -foreground "green"
-    & $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
+		write-host "$(get-date) Importing $justname" -foreground "green"
+		& $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
 		write-host "$(get-date) Compiling $justname" -foreground "green"
 		& $UnifaceIDFPath $INICorePath /cpt /inf $justname
 	}
-  $elapsed = GetElapsedTime $itemtime
-  write-host "Elapsed Time: " $elapsed -foreground "green"
+	$elapsed = GetElapsedTime $itemtime
+	write-host "Elapsed Time: " $elapsed -foreground "green"
 }
 
 cd $PSScriptRoot
