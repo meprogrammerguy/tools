@@ -133,7 +133,6 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $PSScriptRoot
 Convert-Path .
-
 cmd /c start powershell -Command {.\LoadUCData.ps1}
 
 cd $ASNCorePath 
