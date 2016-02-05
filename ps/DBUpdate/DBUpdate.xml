@@ -28,7 +28,7 @@
 		<LoadUCDataFile>P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql</LoadUCDataFile>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspace>d:\messages</TFSWorkspace>
+    <TFSWorkspace>d:\messages\2_27</TFSWorkspace>
     <MessageArgs>$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>D:\DBUpdate\MessagesGenerated_v2\</ASNMessagePath>
     <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
@@ -45,7 +45,7 @@
   </GenerateUARFile>
 	<Users>
 		<JSmith>
-			<SettingsDirectory>D:\DBUpdate\Devo_v2\2_26\</SettingsDirectory>
+			<SettingsDirectory>D:\DBUpdate\Devo_v2\2_28\</SettingsDirectory>
 		</JSmith>
 	</Users>
 </Settings>

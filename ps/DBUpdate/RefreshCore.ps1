@@ -149,12 +149,12 @@ if ($Patterns.Count -le 0)
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /svc /inf
+	& $UnifaceIDFPath $INICorePath /svc
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Forms" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /frm /inf | Out-null
+	& $UnifaceIDFPath $INICorePath /frm | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
@@ -171,7 +171,7 @@ else
 		write-host "$(get-date) Importing $justname" -foreground "green"
 		& $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
 		write-host "$(get-date) Compiling $justname" -foreground "green"
-		& $UnifaceIDFPath $INICorePath /cpt /inf $justname
+		& $UnifaceIDFPath $INICorePath /cpt $justname
 	}
 	$elapsed = GetElapsedTime $itemtime
 	write-host "Elapsed Time: " $elapsed -foreground "green"
