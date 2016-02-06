@@ -16,7 +16,7 @@ $CurrentUser
 [Environment]::UserDomainName
 [Environment]::MachineName
 
-Add-PSSnapin Microsoft.TeamFoundation.PowerShell
+Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
 [xml]$ConfigFile = Get-Content DBUpdate.xml
