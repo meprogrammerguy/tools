@@ -12,6 +12,10 @@ $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdatebetter.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
+{
+  $Pieces = $CoreVersion.split("_")
+}
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
 $OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdatebetter.xml"
@@ -26,8 +30,10 @@ else
 }
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
-$MajorVersion = $Pieces[0]
-$MinorVersion = $Pieces[1]
+if ($Pieces[1].Length -eq "")
+{
+  $Pieces = $CoreVersion.split("_")
+}
 $TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $TFSWorkspace))
 {
@@ -49,10 +55,16 @@ if (-Not (Test-Path $ASNMessagePath))
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$HDriveSeparator = $ConfigFile.Settings.HDriveSeparator
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot
-$LoadUCDataFolder = $PDriveRoot + "CS08_" + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
-$TFSPath = $ConfigFile.Settings.HDriveRoot + "CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
+$HDriveSeparator = "."
+$HDriveRoot2 = "CS06"
+if ($MajorVersion -eq "3")
+{
+  $HDriveSeparator = "_"
+  $HDriveRoot2 = "CSPV6"
+}
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
+$LoadUCDataFolder = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
+$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
 $TFSGlobalPath = $TFSPath + $ConfigFile.Settings.TFSGlobalFolder
 $TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
