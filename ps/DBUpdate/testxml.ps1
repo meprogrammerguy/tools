@@ -49,9 +49,10 @@ if (-Not (Test-Path $ASNMessagePath))
   write-host $WarnSetup -foreground "red"
   Exit
 }
+$HDriveSeparator = $ConfigFile.Settings.HDriveSeparator
 $PDriveRoot = $ConfigFile.Settings.PDriveRoot
 $LoadUCDataFolder = $PDriveRoot + "CS08_" + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
-$TFSPath = $ConfigFile.Settings.HDriveRoot + "CS08." + $MajorVersion + "." + $MinorVersion + "\"
+$TFSPath = $ConfigFile.Settings.HDriveRoot + "CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
 $TFSGlobalPath = $TFSPath + $ConfigFile.Settings.TFSGlobalFolder
 $TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder

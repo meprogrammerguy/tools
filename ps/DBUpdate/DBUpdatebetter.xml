@@ -2,6 +2,7 @@
 <Settings>
   <CoreVersion>3.12</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\CSPV6\</HDriveRoot>
+  <HDriveSeparator>_</HDriveSeparator>
   <PDriveRoot>P:\CS08_3X\</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
