@@ -1,3 +1,4 @@
+cd $PSScriptRoot
 function GetTFSSource([string]$DriveSource) 
 {
   $TFSSource = $DriveSource
@@ -13,21 +14,43 @@ $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$OverrideDirectory = $ConfigFile.Settings.Users.$($CurrentUser).SettingsRoot + $MajorVersion + "_" + $MinorVersion + "\"
-if ($OverrideDirectory -ne "")
+$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdatebetter.xml"
+if (-Not(Test-Path $OverrideConfig))
 {
-	$OverrideDirectory = $OverrideDirectory + "DBUpdatebetter.xml"
-	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
-	[xml]$ConfigFile = Get-Content $OverrideDirectory
+  write-host "settings from $($PSScriptRoot)\DBUpdatebetter.xml" -foreground "yellow"
 }
 else
 {
-	write-host "settings from DBUpdate.xml" -foreground "yellow"
+	write-host "settings from $($OverrideConfig)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideConfig
 }
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
+$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot + $MajorVersion + "_" + $MinorVersion + "\"
+if (-Not (Test-Path $TFSWorkspace))
+{
+  $WarnSetup = $TFSWorkspace  + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
+if (-Not (Test-Path $ASNCorePath))
+{
+  $WarnSetup = $ASNCorePath   + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
+if (-Not (Test-Path $ASNMessagePath))
+{
+  $WarnSetup = $ASNMessagePath   + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot
+$LoadUCDataFolder = $PDriveRoot + "CS08_" + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
 $TFSPath = $ConfigFile.Settings.HDriveRoot + "CS08." + $MajorVersion + "." + $MinorVersion + "\"
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
 $TFSGlobalPath = $TFSPath + $ConfigFile.Settings.TFSGlobalFolder
@@ -41,13 +64,11 @@ $ImportIncludes = "XML:" + $TFSIncludePath + "\*." + $ConfigFile.Settings.TFSInc
 $ImportGlobals = "XML:" + $TFSGlobalPath + "\*." + $ConfigFile.Settings.TFSGlobalExtension
 $ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
 $ImportComponent = "XML:" + $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentExtension
-$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
 $INICorePath = "/ini=" + $ASNCorePath + $ConfigFile.Settings.INICoreName
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
-$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot + $MajorVersion + "_" + $MinorVersion + "\"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$SettingsRoot = 
+$SettingsRoot
 $MajorVersion
 $MinorVersion
 $TFSIncludePath
@@ -67,3 +88,4 @@ $INICorePath
 $TempFileLocation
 $TFSWorkspace
 $MessageArgs
+$LoadUCDataFolder

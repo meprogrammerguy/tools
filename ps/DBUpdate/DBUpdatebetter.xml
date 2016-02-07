@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.26</CoreVersion>
-  <HDriveRoot>H:\unicomp\CSCE\CS06\</HDriveRoot>
-  <PDriveRoot>P:\CS08_2X\</PDriveRoot>
+  <CoreVersion>3.12</CoreVersion>
+  <HDriveRoot>H:\unicomp\CSCE\CSPV6\</HDriveRoot>
+  <PDriveRoot>P:\CS08_3X\</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
@@ -18,26 +18,26 @@
   <TFSComponentFolder>Components</TFSComponentFolder>
   <TFSComponentExtension>cmx</TFSComponentExtension>
   
-  <ASNCoreRoot>D:\DBUpdate\Devo_v2\</ASNCoreRoot>
+  <ASNCoreRoot>D:\DBUpdate\Core\</ASNCoreRoot>
   <INICoreName>idf96.ini</INICoreName>
   <TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
   <RefreshCore>
-      <LogPath>D:\DBUpdate\Devo_v2\Logs\</LogPath>
+      <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>D:\DBUpdate\Devo_v2\LoadUCData.exe</Tool>
+		<Tool>D:\DBUpdate\Core\LoadUCData.exe</Tool>
 		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspaceRoot>d:\messages\</TFSWorkspaceRoot>
+    <TFSWorkspaceRoot>d:\Messages\</TFSWorkspaceRoot>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>D:\DBUpdate\MessagesGenerated_v2\</ASNMessagePath>
-    <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
-    <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
-    <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>
-    <LogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</LogPath>
+    <ASNMessagePath>D:\DBUpdate\Messages\</ASNMessagePath>
+    <INIGenerated>/ini=D:\DBUpdate\Messages\idf96.ini</INIGenerated>
+    <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
+    <ZipLocation>D:\DBUpdate\Messages\7za.exe</ZipLocation>
+    <LogPath>D:\DBUpdate\Messages\Logs\</LogPath>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
       <Database>Messages2xGenerated</Database>
@@ -46,9 +46,4 @@
       <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
     </SQLServer>
   </GenerateUARFile>
-	<Users>
-		<JSmith>
-			<SettingsRoot>D:\DBUpdate\Devo_v2\</SettingsRoot>
-		</JSmith>
-	</Users>
 </Settings>
