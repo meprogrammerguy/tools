@@ -142,7 +142,7 @@ if ($LockTest -match "no pending")
 {
   $itemtime = Get-Date
   write-host "$(get-date) Checking out the messagesgenerated.uar file" -foreground "green"
-  & $TFSToolPath get $MessageArgs | Out-null
+  & $TFSToolPath get /force $MessageArgs | Out-null
   & $TFSToolPath checkout $MessageArgs | Out-null
   $LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs | Out-null
 }

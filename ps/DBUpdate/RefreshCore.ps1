@@ -93,7 +93,7 @@ cd $TFSComponentPath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Components" -foreground "green"
-& $TFSToolPath get $ComponentArgs | Out-null
+& $TFSToolPath get /force $ComponentArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
@@ -101,7 +101,7 @@ cd $TFSModelPath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Models" -foreground "green"
-& $TFSToolPath get $ModelArgs | Out-null
+& $TFSToolPath get /force $ModelArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
@@ -109,7 +109,7 @@ cd $TFSIncludePath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
-& $TFSToolPath get $IncludeArgs | Out-null
+& $TFSToolPath get /force $IncludeArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
