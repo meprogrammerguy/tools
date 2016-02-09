@@ -55,6 +55,8 @@ if ($Pieces[1].Length -eq "")
 {
   $Pieces = $CoreVersion.split("_")
 }
+$MajorVersion = $Pieces[0]
+$MinorVersion = $Pieces[1]
 
 <#
     Global config settings

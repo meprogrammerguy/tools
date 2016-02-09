@@ -2,50 +2,112 @@
     Powershell RefreshCore script
 #>
 $Host.UI.RawUI.WindowTitle = "RefreshCore Script (elevated)"
-cd $PSScriptRoot
-clear
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
   $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
   $retStr
 }
+
+function GetTFSSource([string]$DriveSource) 
+{
+  $TFSSource = $DriveSource
+  $Args = $TFSSource -replace "\\", "/"
+  $Pieces = $Args.split("/")
+  $TFSSource  = "$/" + $Pieces[2] + "/" + $Pieces[3] + "/" + $Pieces[4] + "/" + $Pieces[5]
+  $TFSSource 
+}
+
+cd $PSScriptRoot
+clear
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
-$OverrideDirectory = $ConfigFile.Settings.Users.$($CurrentUser).SettingsDirectory 
-if ($OverrideDirectory -ne "")
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
 {
-	$OverrideDirectory = $OverrideDirectory + "DBUpdate.xml"
-	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
-	[xml]$ConfigFile = Get-Content $OverrideDirectory
+  $Pieces = $CoreVersion.split("_")
+}
+$MajorVersion = $Pieces[0]
+$MinorVersion = $Pieces[1]
+$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+if (-Not(Test-Path $OverrideConfig))
+{
+  write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
 }
 else
 {
-	write-host "settings from DBUpdate.xml" -foreground "yellow"
+	write-host "settings from $($OverrideConfig)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideConfig
 }
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
+{
+  $Pieces = $CoreVersion.split("_")
+}
+$MajorVersion = $Pieces[0]
+$MinorVersion = $Pieces[1]
 
 <#
     Global config settings
 #>
-$TFSToolPath = $ConfigFile.Settings.TFSToolPath
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+if (-Not (Test-Path $UnifaceIDFPath))
+{
+  $WarnSetup = $UnifaceIDFPath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$TFSToolPath = $ConfigFile.Settings.TFSToolPath
+if (-Not (Test-Path $TFSToolPath))
+{
+  $WarnSetup = $TFSToolPath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$HDriveSeparator = "."
+$HDriveRoot2 = "CS06"
+if ($MajorVersion -eq "3")
+{
+  $HDriveSeparator = "_"
+  $HDriveRoot2 = "CSPV6"
+}
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
-$ASNCorePath = $ConfigFile.Settings.ASNCorePath
-$INICorePath = $ConfigFile.Settings.INICorePath
-$TFSIncludePath = $ConfigFile.Settings.TFSIncludePath
-$IncludeArgs = $ConfigFile.Settings.IncludeArgs
-$ImportIncludes = $ConfigFile.Settings.ImportIncludes
+if (-Not (Test-Path $TempFileLocation))
+{
+  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
+if (-Not (Test-Path $ASNCorePath))
+{
+  $WarnSetup = $ASNCorePath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$INICorePath = "/ini=" + $ASNCorePath + $ConfigFile.Settings.INICoreName
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
+$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
 
-$TFSModelPath = $ConfigFile.Settings.TFSModelPath
-$ModelArgs = $ConfigFile.Settings.ModelArgs
-$ImportModels = $ConfigFile.Settings.ImportModels
+$TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
+$TFSGlobalPath = $TFSPath + $ConfigFile.Settings.TFSGlobalFolder
+$TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
+$TFSComponentPath = $TFSPath + $ConfigFile.Settings.TFSComponentFolder
 
-$TFSComponentPath = $ConfigFile.Settings.TFSComponentPath
-$ComponentFiles = $TFSComponentPath + "\*.cmx"
-$ComponentArgs = $ConfigFile.Settings.ComponentArgs
-$ImportComponent = $ConfigFile.Settings.ImportComponent
-$ImportAllComponents = $ImportComponent + "\*.cmx"
+$IncludeArgs = GetTFSSource $TFSIncludePath
+$GlobalArgs = GetTFSSource $TFSGlobalPath
+$ModelArgs = GetTFSSource $TFSModelPath
+$ComponentArgs = GetTFSSource $TFSComponentPath
 
+$ImportIncludes = "XML:" + $TFSIncludePath + "\*." + $ConfigFile.Settings.TFSIncludeExtension
+$ImportGlobals = "XML:" + $TFSGlobalPath + "\*." + $ConfigFile.Settings.TFSGlobalExtension
+$ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
+$ImportComponent = "XML:" + $TFSComponentPath
+$ImportAllComponents = $ImportComponent + "\*." + $ConfigFile.Settings.TFSComponentExtension
+
+$ComponentFiles = $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentExtension
 <#
     This script's config settings
 #>
@@ -113,11 +175,24 @@ write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+cd $TFSGlobalPath
+Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Getting Latest Global Procs" -foreground "green"
+& $TFSToolPath get /force $GlobalArgs | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
 cd $ASNCorePath 
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Importing Include Procs" -foreground "green"
 & $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+$itemtime = Get-Date
+write-host "$(get-date) Importing Global Procs" -foreground "green"
+& $UnifaceIDFPath $INICorePath /imp $GlobalIncludes | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
