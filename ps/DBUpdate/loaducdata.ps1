@@ -41,6 +41,8 @@ if ($Pieces[1].Length -eq "")
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
 
+write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
+
 <#
     Global config settings
 #>

@@ -48,6 +48,8 @@ if ($Pieces[1].Length -eq "")
 }
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
+  
+write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
 
 <#
     Global config settings
@@ -192,7 +194,7 @@ $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Importing Global Procs" -foreground "green"
-& $UnifaceIDFPath $INICorePath /imp $GlobalIncludes | Out-null
+& $UnifaceIDFPath $INICorePath /imp $ImportGlobals | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
