@@ -2,13 +2,24 @@
     Powershell GenerateUAR Script
 #>
 $Host.UI.RawUI.WindowTitle = "GenerateUAR Script (elevated)"
-cd $PSScriptRoot
+
+function GetTFSSource([string]$DriveSource) 
+{
+  $TFSSource = $DriveSource
+  $Args = $TFSSource -replace "\\", "/"
+  $Pieces = $Args.split("/")
+  $TFSSource  = "$/" + $Pieces[2] + "/" + $Pieces[3] + "/" + $Pieces[4] + "/" + $Pieces[5]
+  $TFSSource 
+}
+
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
   $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
   $retStr
 }
+
+cd $PSScriptRoot
 clear
 $script:startTime = Get-Date
 $CurrentUser = [Environment]::UserName
@@ -20,40 +31,91 @@ Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
 [xml]$ConfigFile = Get-Content DBUpdate.xml
-
-$OverrideDirectory = $ConfigFile.Settings.Users.$($CurrentUser).SettingsDirectory 
-if ($OverrideDirectory -ne "")
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
 {
-	$OverrideDirectory = $OverrideDirectory + "DBUpdate.xml"
-	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
-	[xml]$ConfigFile = Get-Content $OverrideDirectory
+  $Pieces = $CoreVersion.split("_")
+}
+$MajorVersion = $Pieces[0]
+$MinorVersion = $Pieces[1]
+$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+if (-Not(Test-Path $OverrideConfig))
+{
+  write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
 }
 else
 {
-	write-host "settings from DBUpdate.xml" -foreground "yellow"
+	write-host "settings from $($OverrideConfig)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideConfig
+}
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
+{
+  $Pieces = $CoreVersion.split("_")
 }
 
 <#
     Global config settings
 #>
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+if (-Not (Test-Path $UnifaceIDFPath))
+{
+  $WarnSetup = $UnifaceIDFPath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
-$TFSModelPath = $ConfigFile.Settings.TFSModelPath
-$ModelArgs = $ConfigFile.Settings.ModelArgs
-$ImportModels = $ConfigFile.Settings.ImportModels
+if (-Not (Test-Path $TFSToolPath))
+{
+  $WarnSetup = $TFSToolPath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$HDriveSeparator = "."
+$HDriveRoot2 = "CS06"
+if ($MajorVersion -eq "3")
+{
+  $HDriveSeparator = "_"
+  $HDriveRoot2 = "CSPV6"
+}
+$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
+$TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
+$ModelArgs = GetTFSSource $TFSModelPath
+$ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
+if (-Not (Test-Path $TempFileLocation))
+{
+  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 
 <#
     This script's config settings
 #>
-$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspace
+$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot + $MajorVersion + "_" + $MinorVersion + "\"
+if (-Not (Test-Path $TFSWorkspace))
+{
+  $WarnSetup = $TFSWorkspace + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 $MessageOld = $TempFileLocation + "\messagesgenerated.old"
 $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
-$MessageArgs = $ConfigFile.Settings.GenerateUARFile.MessageArgs
+$MessageArgs = GetTFSSource $TFSPath
+$MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
 $ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
 $INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
+if (-Not (Test-Path $ZipLocation))
+{
+  $WarnSetup = $ZipLocation + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 $LogPath = $ConfigFile.Settings.GenerateUARFile.LogPath
 
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
