@@ -9,7 +9,7 @@ function GetTFSSource([string]$DriveSource)
 }
 
 $CurrentUser = [Environment]::UserName
-[xml]$ConfigFile = Get-Content DBUpdatebetter.xml
+[xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
 if ($Pieces[1].Length -eq "")
@@ -18,10 +18,10 @@ if ($Pieces[1].Length -eq "")
 }
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdatebetter.xml"
+$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
-  write-host "settings from $($PSScriptRoot)\DBUpdatebetter.xml" -foreground "yellow"
+  write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
 }
 else
 {

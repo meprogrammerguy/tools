@@ -14,32 +14,64 @@ $script:startTime = Get-Date
 write-host "LoadUCData Script Started at $script:startTime" -foreground "green"
 
 [xml]$ConfigFile = Get-Content DBUpdate.xml
-$OverrideDirectory = $ConfigFile.Settings.Users.$([Environment]::UserName).SettingsDirectory 
-if ($OverrideDirectory -ne "")
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
 {
-	$OverrideDirectory = $OverrideDirectory + "DBUpdate.xml"
-	write-host "settings from $($OverrideDirectory)" -foreground "yellow"
-	[xml]$ConfigFile = Get-Content $OverrideDirectory
+  $Pieces = $CoreVersion.split("_")
+}
+$MajorVersion = $Pieces[0]
+$MinorVersion = $Pieces[1]
+$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+if (-Not(Test-Path $OverrideConfig))
+{
+  write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
 }
 else
 {
-	write-host "settings from DBUpdate.xml" -foreground "yellow"
+	write-host "settings from $($OverrideConfig)" -foreground "yellow"
+	[xml]$ConfigFile = Get-Content $OverrideConfig
+}
+$CoreVersion = $ConfigFile.Settings.CoreVersion
+$Pieces = $CoreVersion.split(".")
+if ($Pieces[1].Length -eq "")
+{
+  $Pieces = $CoreVersion.split("_")
 }
 
 <#
     Global config settings
 #>
-$ASNCorePath = $ConfigFile.Settings.ASNCorePath
+$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
+if (-Not (Test-Path $ASNCorePath))
+{
+  $WarnSetup = $ASNCorePath + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
+if (-Not (Test-Path $TempFileLocation))
+{
+  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
 
 <#
     This script's config settings
 #>
-$ASNFileName = $ConfigFile.Settings.LoadUCData.ASNFileName
 $Tool = $ConfigFile.Settings.LoadUCData.Tool
-$LoadUCDataFile = $ConfigFile.Settings.LoadUCData.LoadUCDataFile
+if (-Not (Test-Path $Tool))
+{
+  $WarnSetup = $Tool + "Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
+$LoadUCDataFile = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
 $LoadUCDataOld = $TempFileLocation + "LoadUCData.old"
-$LoadUCDataASN = $ASNCorePath + $ASNFileName
+$LoadUCDataASN = $ASNCorePath + $ConfigFile.Settings.LoadUCData.ASNFileName
 $LoadUCDataTempFile = $TempFileLocation + "LoadUCData.sql"
 
 cd $ASNCorePath
