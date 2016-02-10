@@ -8,6 +8,13 @@ function GetTFSSource([string]$DriveSource)
   $TFSSource 
 }
 
+function GetElapsedTime([datetime]$starttime) 
+{
+  $runtime = $(get-date) - $starttime
+  $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
+  $retStr
+}
+
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
@@ -79,28 +86,23 @@ $ImportIncludes = "XML:" + $TFSIncludePath + "\*." + $ConfigFile.Settings.TFSInc
 $ImportGlobals = "XML:" + $TFSGlobalPath + "\*." + $ConfigFile.Settings.TFSGlobalExtension
 $ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
 $ImportComponent = "XML:" + $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentExtension
-$INICorePath = "/ini=" + $ASNCorePath + $ConfigFile.Settings.INICoreName
+$INICorePath = "/ini=" + $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.INICoreLocation
 $TempFileLocation = $ConfigFile.Settings.TempFileLocation
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$SettingsRoot
-$MajorVersion
-$MinorVersion
-$TFSIncludePath
-$TFSGlobalPath 
-$TFSModelPath
-$TFSComponentPath
-$IncludeArgs
-$GlobalArgs
-$ModelArgs
-$ComponentArgs
-$ImportIncludes
-$ImportGlobals
-$ImportModels
-$ImportComponent
-$ASNCorePath
+$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
+$UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
+$ASNCorePathAll = "/asn=" + $ASNCorePath + "idfall"
+"==="
+$ASNCorePathAll
+$ASNCorePath 
+$UnifaceIDFPath
 $INICorePath
-$TempFileLocation
-$TFSWorkspace
-$MessageArgs
-$LoadUCDataFolder
+$ImportIncludes
+"==="
+Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Importing Include Procs" -foreground "green"
+& $UnifaceIDFPath $ASNCorePathAll $INICorePath /imp $ImportIncludes | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"

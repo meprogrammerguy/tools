@@ -111,7 +111,7 @@ $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
 $ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
-$INIGenerated = $ConfigFile.Settings.GenerateUARFile.INIGenerated
+$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 if (-Not (Test-Path $ZipLocation))
@@ -216,19 +216,19 @@ If (Test-Path $ResourcesGenerated)
 
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /imp $ImportModels | Out-null
+& $UnifaceIDFPath $INIMessageLocation /imp $ImportModels | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Analyizing Models" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /con | Out-null
+& $UnifaceIDFPath $INIMessageLocation /con | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
-& $UnifaceIDFPath $INIGenerated /tst gen_messages.aps RSY | Out-null
+& $UnifaceIDFPath $INIMessageLocation /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 

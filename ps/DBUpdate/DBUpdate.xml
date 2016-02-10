@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.27</CoreVersion>
+  <CoreVersion>2.26</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
@@ -20,6 +20,7 @@
   
   <ASNCoreRoot>D:\DBUpdate\Core\</ASNCoreRoot>
   <INICoreName>idf96.ini</INICoreName>
+  <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
   <TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
   <RefreshCore>
       <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
@@ -35,6 +36,7 @@
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>D:\DBUpdate\Messages\</ASNMessagePath>
     <INIGenerated>/ini=D:\DBUpdate\Messages\idf96.ini</INIGenerated>
+    <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
     <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\DBUpdate\Messages\7za.exe</ZipLocation>
     <LogPath>D:\DBUpdate\Messages\Logs\</LogPath>

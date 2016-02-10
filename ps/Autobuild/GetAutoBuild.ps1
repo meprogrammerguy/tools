@@ -10,7 +10,7 @@ Copy-Item \\al-csbuild-s05\c\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users
 Copy-Item \\al-csbuild-vm1\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.vm1
 h:
 cd H:\unicomp\AutoBuild\COMMANDseries
-$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get $/AutoBuild/COMMANDseries/COMMANDseriesBuild.bld /noprompt
+$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get /force $/AutoBuild/COMMANDseries/COMMANDseriesBuild.bld /noprompt
 $tf | Out-null
 $tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" checkout $/AutoBuild/COMMANDseries/COMMANDseriesBuild.bld /noprompt
 $tf | Out-null

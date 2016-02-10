@@ -89,8 +89,8 @@ if (-Not (Test-Path $ASNCorePath))
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$INICorePath = "/ini=" + $ASNCorePath + $ConfigFile.Settings.INICoreName
 $PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
+$INICorePath = "/ini=" + $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.INICoreLocation
 $TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
 
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
@@ -207,16 +207,20 @@ write-host "$(get-date) Analyizing Models" -foreground "green"
 & $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
+write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
+& $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
 
 cd $PSScriptRoot
 Convert-Path .
 cmd /c start powershell -Command {.\LoadUCData.ps1}
 
-cd $ASNCorePath 
+cd $ASNCorePath
 Convert-Path .
-write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
-& $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
-
+$itemtime = Get-Date
+write-host "$(get-date) Compiling all Global Procs" -foreground "green"
+& $UnifaceIDFPath $INICorePath /lib
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
 if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date
