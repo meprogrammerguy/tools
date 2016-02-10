@@ -28,6 +28,7 @@ $CurrentUser
 [Environment]::MachineName
 
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
+Import-Module SqlPs -DisableNameChecking
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
 [xml]$ConfigFile = Get-Content DBUpdate.xml
