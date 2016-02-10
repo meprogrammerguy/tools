@@ -1,42 +1,45 @@
 <?xml version="1.0"?>
 <Settings>
+  <CoreVersion>2.26</CoreVersion>
+  <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
+  <PDriveRoot>P:\CS08_</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
-  <TFSIncludePath>H:\unicomp\CSCE\CS06\CS08.2.27\IncludeProcs</TFSIncludePath>
-  <IncludeArgs>$/CSCE/CS06/CS08.2.27/USYS/IncludeProcs</IncludeArgs>
-  <ImportIncludes>XML:H:\Unicomp\CSCE\CS06\CS08.2.27\IncludeProcs\*.ipx</ImportIncludes>
+  <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
+  <TFSIncludeExtension>ipx</TFSIncludeExtension>
   
-  <TFSModelPath>H:\unicomp\CSCE\CS06\CS08.2.27\Models</TFSModelPath>
-  <ModelArgs>$/CSCE/CS06/CS08.2.27/USYS/Models</ModelArgs>
-  <ImportModels>XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Models\*.xml</ImportModels>
+  <TFSGlobalFolder>GlobalProcs</TFSGlobalFolder>
+  <TFSGlobalExtension>prx</TFSGlobalExtension>
 
-  <TFSComponentPath>H:\unicomp\CSCE\CS06\CS08.2.27\Components</TFSComponentPath>
-  <ComponentArgs>$/CSCE/CS06/CS08.2.27/USYS/Components</ComponentArgs>
-  <ImportComponent>XML:H:\Unicomp\CSCE\CS06\CS08.2.27\Components</ImportComponent>
+  <TFSModelFolder>Models</TFSModelFolder>
+  <TFSModelExtension>xml</TFSModelExtension>
+
+  <TFSComponentFolder>Components</TFSComponentFolder>
+  <TFSComponentExtension>cmx</TFSComponentExtension>
   
-  <ASNCorePath>D:\DBUpdate\Devo_v2\</ASNCorePath>
-  <INICorePath>/ini=P:\CS08_2X\CS08_2_27\USERS\MAIN\idf96.ini</INICorePath>
-  <DBUpdate>
-      <LogPath>D:\DBUpdate\Devo_v2\Logs\</LogPath>
-      <ModelPrompt>DBUpdate script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
-  </DBUpdate>
+  <ASNCoreRoot>D:\DBUpdate\Core\</ASNCoreRoot>
+  <INICoreName>idf96.ini</INICoreName>
+  <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
+  <TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
+  <RefreshCore>
+      <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
+      <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
+  </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>C:\Users\jsmith\Documents\GitHub\tools\ps\DBUpdate\cs\LoadUCDATA\bin\Release\LoadUCData.exe</Tool>
-		<LoadUCDataFile>P:\CS08_2X\CS08_2_27\UTILS\LoadUCData.sql</LoadUCDataFile>
-		<TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
+		<Tool>D:\DBUpdate\Core\LoadUCData.exe</Tool>
+		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspace>d:\messages</TFSWorkspace>
-    <MessageArgs>$/CSCE/CS06/CS08.2.27/USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>D:\DBUpdate\MessagesGenerated_v2\</ASNMessagePath>
-    <UARGeneratedFile>D:\DBUpdate\MessagesGenerated_v2\messagesgenerated.uar</UARGeneratedFile>
-    <INIGenerated>/ini=D:\DBUpdate\MessagesGenerated_v2\idf96.ini</INIGenerated>
-    <ResourcesGenerated>D:\DBUpdate\MessagesGenerated_v2\resources\msg</ResourcesGenerated>
-    <ZipLocation>D:\DBUpdate\MessagesGenerated_v2\7za.exe</ZipLocation>
-    <ZipArgs>a -tzip </ZipArgs>
-    <LogPath>D:\DBUpdate\MessagesGenerated_v2\Logs\</LogPath>
+    <TFSWorkspaceRoot>d:\Messages\</TFSWorkspaceRoot>
+    <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
+    <ASNMessagePath>D:\DBUpdate\Messages\</ASNMessagePath>
+    <INIGenerated>/ini=D:\DBUpdate\Messages\idf96.ini</INIGenerated>
+    <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
+    <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
+    <ZipLocation>D:\DBUpdate\Messages\7za.exe</ZipLocation>
+    <LogPath>D:\DBUpdate\Messages\Logs\</LogPath>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
       <Database>Messages2xGenerated</Database>
@@ -45,9 +48,4 @@
       <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
     </SQLServer>
   </GenerateUARFile>
-	<Users>
-		<JSmith>
-			<SettingsDirectory>C:\Users\jsmith\Documents\GitHub\tools\ps\DBUpdate\settings\</SettingsDirectory>
-		</JSmith>
-	</Users>
 </Settings>
