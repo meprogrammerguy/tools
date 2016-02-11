@@ -2,6 +2,8 @@
     Powershell RefreshCore script
 #>
 $Host.UI.RawUI.WindowTitle = "RefreshCore Script (elevated)"
+Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
+
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
@@ -19,7 +21,6 @@ function GetTFSSource([string]$DriveSource)
 }
 
 cd $PSScriptRoot
-clear
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
@@ -125,7 +126,6 @@ $script:startTime = Get-Date
 $CurrentUser
 [Environment]::UserDomainName
 [Environment]::MachineName
-Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
 write-host "Script Started at $script:startTime" -foreground "green"
 write-host "$ModelPrompt $Tables" -foreground "green"
 
@@ -207,8 +207,11 @@ write-host "$(get-date) Analyizing Models" -foreground "green"
 & $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
+$itemtime = Get-Date
 write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
+$elapsed = GetElapsedTime $itemtime 
+write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $PSScriptRoot
 Convert-Path .
@@ -218,9 +221,10 @@ cd $ASNCorePath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Compiling all Global Procs" -foreground "green"
-& $UnifaceIDFPath $INICorePath /lib
+& $UnifaceIDFPath $INICorePath /lib | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+
 if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date
@@ -231,10 +235,7 @@ if ($Patterns.Count -le 0)
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
 	& $UnifaceIDFPath $INICorePath /svc
-  $elapsed = GetElapsedTime $itemtime
-  write-host "Elapsed Time: " $elapsed -foreground "green"
-  $itemtime = Get-Date
-  write-host "$(get-date) Compiling all Forms" -foreground "green"
+  write-host "$(get-date) Compiling all Forms (at the same time)" -foreground "green"
 	& $UnifaceIDFPath $INICorePath /frm | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
