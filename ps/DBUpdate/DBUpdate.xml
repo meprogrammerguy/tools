@@ -35,7 +35,6 @@
     <TFSWorkspaceRoot>d:\Messages\</TFSWorkspaceRoot>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>D:\DBUpdate\Messages\</ASNMessagePath>
-    <INIGenerated>/ini=D:\DBUpdate\Messages\idf96.ini</INIGenerated>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
     <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\DBUpdate\Messages\7za.exe</ZipLocation>
