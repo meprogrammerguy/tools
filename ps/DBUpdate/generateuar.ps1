@@ -2,6 +2,8 @@
     Powershell GenerateUAR Script
 #>
 $Host.UI.RawUI.WindowTitle = "GenerateUAR Script (elevated)"
+Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
+Import-Module SqlPs -DisableNameChecking
 
 function GetTFSSource([string]$DriveSource) 
 {
@@ -19,18 +21,15 @@ function GetElapsedTime([datetime]$starttime)
   $retStr
 }
 
-cd $PSScriptRoot
-clear
 $script:startTime = Get-Date
 $CurrentUser = [Environment]::UserName
 $CurrentUser
 [Environment]::UserDomainName
 [Environment]::MachineName
 
-Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
-Import-Module SqlPs -DisableNameChecking
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
+cd $PSScriptRoot
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
