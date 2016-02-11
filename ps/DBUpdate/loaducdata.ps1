@@ -2,17 +2,17 @@
     Powershell LoadUCData script
 #>
 $Host.UI.RawUI.WindowTitle = "LoadUCData Script"
-cd $PSScriptRoot
+
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
   $retStr = [string]::format("{0} hours(s), {1} minutes(s), {2} seconds(s)", $runtime.Hours, $runtime.Minutes, $runtime.Seconds)
   $retStr
 }
-clear
 $script:startTime = Get-Date
 write-host "LoadUCData Script Started at $script:startTime" -foreground "green"
 
+cd $PSScriptRoot
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
