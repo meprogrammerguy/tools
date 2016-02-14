@@ -135,6 +135,10 @@ $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
 {
   $Patterns = @()
+  $Patterns = $Patterns + @('\"MSG_R')
+	$Patterns = $Patterns + @('\"MSG_S')
+	$Patterns = $Patterns + @('\"MSG_Y')
+  $Patterns = $Patterns + @('\"TAG_')
 	foreach ($Piece in $Pieces)
 	{
 		$Piece = $Piece.ToUpper()
