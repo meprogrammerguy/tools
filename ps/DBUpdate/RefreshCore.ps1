@@ -116,6 +116,7 @@ $ComponentFiles = $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentE
 #>
 $LocalResourcesFolder = $ASNCorePath + $ConfigFile.Settings.RefreshCore.LocalResourcesFolder
 $ProductionResourcesFolder = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\resources"
+$RoboLog = $TempFileLocation + "robocopy_$($CurrentUser).log"
 if ($LocalResourcesFolder.Length -eq "")
 {
   write-host "Directly building to production resources folder (slower)" -foreground "yellow"
@@ -281,8 +282,11 @@ else
 
 if ($LocalResourcesFolder.Length -ne "")
 {
+  $itemtime = Get-Date
   write-host "$(get-date) Copying local resources to production" -foreground "green"
-  robocopy "$($LocalResourcesFolder)" "$($ProductionResourcesFolder)" /MIR
+  robocopy "$($LocalResourcesFolder)" "$($ProductionResourcesFolder)" /E /MT:20 /V /LOG:$RoboLog
+  $elapsed = GetElapsedTime $itemtime
+	write-host "Elapsed Time: " $elapsed -foreground "green"
 }
 
 cd $PSScriptRoot
