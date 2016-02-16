@@ -25,6 +25,7 @@
   <RefreshCore>
       <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
+      <LocalResourcesFolder></LocalResourcesFolder>
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
