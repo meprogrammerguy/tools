@@ -114,6 +114,17 @@ $ComponentFiles = $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentE
 <#
     This script's config settings
 #>
+$LocalResourcesFolder = $ASNCorePath + $ConfigFile.Settings.RefreshCore.LocalResourcesFolder
+$ProductionResourcesFolder = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\resources"
+$RoboLog = $TempFileLocation + "robocopy_$($CurrentUser).log"
+if ($LocalResourcesFolder.Length -eq "")
+{
+  write-host "Directly building to production resources folder (slower)" -foreground "yellow"
+}
+else
+{
+  write-host "Creating a local resources first, and robocopying to production (faster)" -foreground "green"
+}
 $LogPath = $ConfigFile.Settings.RefreshCore.LogPath
 $ModelPrompt = $ConfigFile.Settings.RefreshCore.ModelPrompt
 
@@ -135,6 +146,10 @@ $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
 {
   $Patterns = @()
+  $Patterns = $Patterns + @('\"MSG_R')
+	$Patterns = $Patterns + @('\"MSG_S')
+	$Patterns = $Patterns + @('\"MSG_Y')
+  $Patterns = $Patterns + @('\"TAG_')
 	foreach ($Piece in $Pieces)
 	{
 		$Piece = $Piece.ToUpper()
@@ -151,6 +166,12 @@ foreach ($file in Get-ChildItem -name)
   {
     Remove-Item $file -force
   } 
+}
+
+If (Test-Path $LocalResourcesFolder)
+{
+  write-host "$(get-date) Removing local resources folder" -foreground "green"
+	Remove-Item  -Recurse -Force $LocalResourcesFolder
 }
 
 cd $TFSComponentPath
@@ -256,6 +277,15 @@ else
 		& $UnifaceIDFPath $INICorePath /cpt $justname
 	}
 	$elapsed = GetElapsedTime $itemtime
+	write-host "Elapsed Time: " $elapsed -foreground "green"
+}
+
+if ($LocalResourcesFolder.Length -ne "")
+{
+  $itemtime = Get-Date
+  write-host "$(get-date) Copying local resources to production" -foreground "green"
+  robocopy "$($LocalResourcesFolder)" "$($ProductionResourcesFolder)" /E /MT:20 /V /LOG:$RoboLog
+  $elapsed = GetElapsedTime $itemtime
 	write-host "Elapsed Time: " $elapsed -foreground "green"
 }
 
