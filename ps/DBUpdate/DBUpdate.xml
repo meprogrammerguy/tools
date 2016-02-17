@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.26</CoreVersion>
+  <CoreVersion>2.27</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
@@ -25,7 +25,7 @@
   <RefreshCore>
       <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
-      <LocalResourcesFolder></LocalResourcesFolder>
+      <LocalResourcesFolder>resources</LocalResourcesFolder>
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
