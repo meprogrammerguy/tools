@@ -116,7 +116,7 @@ $ComponentFiles = $TFSComponentPath + "\*." + $ConfigFile.Settings.TFSComponentE
 #>
 $LocalResourcesFolder = $ASNCorePath + $ConfigFile.Settings.RefreshCore.LocalResourcesFolder
 $ProductionResourcesFolder = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\resources"
-$RoboLog = $TempFileLocation + "robocopy_$($CurrentUser).log"
+$RoboLog = $TempFileLocation + "robocopy_$($CurrentUser)_$($MajorVersion)_$($MinorVersion).log"
 if ($LocalResourcesFolder.Length -eq "")
 {
   write-host "Directly building to production resources folder (slower)" -foreground "yellow"
@@ -146,10 +146,6 @@ $Pieces = $Tables.split(",")
 if ($Pieces[0] -gt "")
 {
   $Patterns = @()
-  $Patterns = $Patterns + @('\"MSG_R')
-	$Patterns = $Patterns + @('\"MSG_S')
-	$Patterns = $Patterns + @('\"MSG_Y')
-  $Patterns = $Patterns + @('\"TAG_')
 	foreach ($Piece in $Pieces)
 	{
 		$Piece = $Piece.ToUpper()
@@ -198,26 +194,8 @@ write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
-cd $TFSGlobalPath
-Convert-Path .
-$itemtime = Get-Date
-write-host "$(get-date) Getting Latest Global Procs" -foreground "green"
-& $TFSToolPath get /force $GlobalArgs | Out-null
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
-
 cd $ASNCorePath 
 Convert-Path .
-$itemtime = Get-Date
-write-host "$(get-date) Importing Include Procs" -foreground "green"
-& $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
-$itemtime = Get-Date
-write-host "$(get-date) Importing Global Procs" -foreground "green"
-& $UnifaceIDFPath $INICorePath /imp $ImportGlobals | Out-null
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
 & $UnifaceIDFPath $INICorePath /imp $ImportModels | Out-null
@@ -233,6 +211,11 @@ write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
+$itemtime = Get-Date
+write-host "$(get-date) Importing Include Procs" -foreground "green"
+& $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
 
 cd $PSScriptRoot
 Convert-Path .
@@ -240,12 +223,6 @@ cmd /c start powershell -Command {.\LoadUCData.ps1}
 
 cd $ASNCorePath
 Convert-Path .
-$itemtime = Get-Date
-write-host "$(get-date) Compiling all Global Procs" -foreground "green"
-& $UnifaceIDFPath $INICorePath /lib | Out-null
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
-
 if ($Patterns.Count -le 0)
 {
   $itemtime = Get-Date

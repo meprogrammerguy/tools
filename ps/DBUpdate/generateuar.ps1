@@ -188,7 +188,7 @@ cd $TFSModelPath
 Convert-Path .
 $itemtime = Get-Date
 write-host "$(get-date) Getting Latest Models" -foreground "green"
-& $TFSToolPath get $ModelArgs | Out-null
+& $TFSToolPath get /force $ModelArgs | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
