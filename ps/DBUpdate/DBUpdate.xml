@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.27</CoreVersion>
+  <CoreVersion>2.28</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
-  <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
+  <UnifaceIDFPath>C:\tools\Uniface\U9605\X505\common\bin\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
   <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
@@ -18,33 +18,33 @@
   <TFSComponentFolder>Components</TFSComponentFolder>
   <TFSComponentExtension>cmx</TFSComponentExtension>
   
-  <ASNCoreRoot>D:\DBUpdate\Core\</ASNCoreRoot>
+  <ASNCoreRoot>D:\psUpdate\Core\</ASNCoreRoot>
   <INICoreName>idf96.ini</INICoreName>
   <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
-  <TempFileLocation>D:\DBUpdate\Temp\</TempFileLocation>
+  <TempFileLocation>D:\psUpdate\Temp\</TempFileLocation>
   <RefreshCore>
-      <LogPath>D:\DBUpdate\Core\Logs\</LogPath>
+      <LogPath>D:\psUpdate\Core\Logs\</LogPath>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
       <LocalResourcesFolder>resources</LocalResourcesFolder>
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>D:\DBUpdate\Core\LoadUCData.exe</Tool>
+		<Tool>C:\Users\mepro\Documents\GitHub\tools\ps\DBUpdate\cs\LoadUCDATA\bin\Release\LoadUCData.exe</Tool>
 		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspaceRoot>d:\Messages\</TFSWorkspaceRoot>
+    <TFSWorkspaceRoot>D:\psUpdate\Messages\</TFSWorkspaceRoot>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>D:\DBUpdate\Messages\</ASNMessagePath>
+    <ASNMessagePath>D:\psUpdate\Messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
     <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
-    <ZipLocation>D:\DBUpdate\Messages\7za.exe</ZipLocation>
+    <ZipLocation>D:\psUpdate\Messages\7za.exe</ZipLocation>
     <LogPath>D:\DBUpdate\Messages\Logs\</LogPath>
     <SQLServer>
-      <Server>AL-SQL2K8R2-S01</Server>
+      <Server>Messages2xGenerated</Server>
       <Database>Messages2xGenerated</Database>
-      <User>ital</User>
-      <Password>ital</Password>
+      <User>Messages2xGenerated</User>
+      <Password>Messages2xGenerated</Password>
       <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
     </SQLServer>
   </GenerateUARFile>
