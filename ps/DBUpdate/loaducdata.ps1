@@ -49,14 +49,14 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 $ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
 {
-  $WarnSetup = $ASNCorePath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $ASNCorePath + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$TempFileLocation = $ConfigFile.Settings.TempFileLocation
+$TempFileLocation = $ASNCorePath + $ConfigFile.Settings.TempFileFolder + "\"
 if (-Not (Test-Path $TempFileLocation))
 {
-  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $TempFileLocation + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
@@ -67,7 +67,7 @@ if (-Not (Test-Path $TempFileLocation))
 $Tool = $ConfigFile.Settings.LoadUCData.Tool
 if (-Not (Test-Path $Tool))
 {
-  $WarnSetup = $Tool + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $Tool + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }

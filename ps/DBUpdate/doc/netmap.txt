@@ -1,0 +1,5 @@
+ // From a priv powershell you need to map your networked drives, like this:
+ 
+ net use p: \\al-devnas-s00\CS_Prod
+ net use h: \\al-filesrv-s01\users\j_smith
+ net use t: \\al-devnas-s00\Dev_tools

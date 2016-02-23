@@ -23,9 +23,9 @@ function GetElapsedTime([datetime]$starttime)
 
 $script:startTime = Get-Date
 $CurrentUser = [Environment]::UserName
-$CurrentUser
-[Environment]::UserDomainName
-[Environment]::MachineName
+write-host "Current user: $CurrentUser" -foreground "yellow"
+write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
+write-host "Current machine: $([Environment]::MachineName)" -foreground "yellow"
 
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
@@ -66,14 +66,14 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 if (-Not (Test-Path $UnifaceIDFPath))
 {
-  $WarnSetup = $UnifaceIDFPath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $UnifaceIDFPath + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
 if (-Not (Test-Path $TFSToolPath))
 {
-  $WarnSetup = $TFSToolPath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $TFSToolPath + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
@@ -88,21 +88,22 @@ $TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSep
 $TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
 $ModelArgs = GetTFSSource $TFSModelPath
 $ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
-$TempFileLocation = $ConfigFile.Settings.TempFileLocation
-if (-Not (Test-Path $TempFileLocation))
-{
-  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
-  write-host $WarnSetup -foreground "red"
-  Exit
-}
 
 <#
     This script's config settings
 #>
-$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot + $MajorVersion + "_" + $MinorVersion + "\"
+$ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
+$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot
 if (-Not (Test-Path $TFSWorkspace))
 {
-  $WarnSetup = $TFSWorkspace + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $TFSWorkspace + " Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$TempFileLocation = $ASNMessagePath + $ConfigFile.Settings.TempFileFolder + "\"
+if (-Not (Test-Path $TempFileLocation))
+{
+  $WarnSetup = $TempFileLocation + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
@@ -110,17 +111,16 @@ $MessageOld = $TempFileLocation + "\messagesgenerated.old"
 $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
 $INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 if (-Not (Test-Path $ZipLocation))
 {
-  $WarnSetup = $ZipLocation + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $ZipLocation + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$LogPath = $ConfigFile.Settings.GenerateUARFile.LogPath
+$LogPath = $ASNMessagePath + $ConfigFile.Settings.GenerateUARFile.LogFolder + "\"
 
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
 $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database

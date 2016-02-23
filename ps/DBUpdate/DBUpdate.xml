@@ -3,7 +3,7 @@
   <CoreVersion>2.28</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
-  <UnifaceIDFPath>C:\tools\Uniface\U9605\X505\common\bin\idf.exe</UnifaceIDFPath>
+  <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\bin\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
   <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
@@ -21,9 +21,9 @@
   <ASNCoreRoot>D:\psUpdate\Core\</ASNCoreRoot>
   <INICoreName>idf96.ini</INICoreName>
   <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
-  <TempFileLocation>D:\psUpdate\Temp\</TempFileLocation>
+  <TempFileFolder>Temp</TempFileFolder>
   <RefreshCore>
-      <LogPath>D:\psUpdate\Core\Logs\</LogPath>
+      <LogFolder>Logs</LogFolder>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
       <LocalResourcesFolder>resources</LocalResourcesFolder>
   </RefreshCore>
@@ -37,14 +37,14 @@
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>D:\psUpdate\Messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
-    <ResourcesGenerated>D:\DBUpdate\Messages\resources\msg</ResourcesGenerated>
+    <ResourcesGenerated>D:\psUpdate\Messages\resources\msg</ResourcesGenerated>
     <ZipLocation>D:\psUpdate\Messages\7za.exe</ZipLocation>
-    <LogPath>D:\DBUpdate\Messages\Logs\</LogPath>
+    <LogFolder>Logs</LogFolder>
     <SQLServer>
-      <Server>Messages2xGenerated</Server>
+      <Server>AL-SQL2K8R2-S01</Server>
       <Database>Messages2xGenerated</Database>
-      <User>Messages2xGenerated</User>
-      <Password>Messages2xGenerated</Password>
+      <User>ital</User>
+      <Password>ital</Password>
       <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
     </SQLServer>
   </GenerateUARFile>

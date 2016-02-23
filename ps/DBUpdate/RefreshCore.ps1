@@ -58,14 +58,14 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 if (-Not (Test-Path $UnifaceIDFPath))
 {
-  $WarnSetup = $UnifaceIDFPath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $UnifaceIDFPath + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
 $TFSToolPath = $ConfigFile.Settings.TFSToolPath
 if (-Not (Test-Path $TFSToolPath))
 {
-  $WarnSetup = $TFSToolPath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $TFSToolPath + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
@@ -76,17 +76,17 @@ if ($MajorVersion -eq "3")
   $HDriveSeparator = "_"
   $HDriveRoot2 = "CSPV6"
 }
-$TempFileLocation = $ConfigFile.Settings.TempFileLocation
-if (-Not (Test-Path $TempFileLocation))
-{
-  $WarnSetup = $TempFileLocation + "Does not exist, You need to set this up first (New version?)"
-  write-host $WarnSetup -foreground "red"
-  Exit
-}
 $ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
 {
-  $WarnSetup = $ASNCorePath + "Does not exist, You need to set this up first (New version?)"
+  $WarnSetup = $ASNCorePath + " Does not exist, You need to set this up first (New version?)"
+  write-host $WarnSetup -foreground "red"
+  Exit
+}
+$TempFileLocation = $ASNCorePath + $ConfigFile.Settings.TempFileFolder + "\"
+if (-Not (Test-Path $TempFileLocation))
+{
+  $WarnSetup = $TempFileLocation + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
@@ -125,20 +125,19 @@ else
 {
   write-host "Creating a local resources first, and robocopying to production (faster)" -foreground "green"
 }
-$LogPath = $ConfigFile.Settings.RefreshCore.LogPath
+$LogPath = $ASNCorePath + $ConfigFile.Settings.RefreshCore.LogFolder + "\"
 $ModelPrompt = $ConfigFile.Settings.RefreshCore.ModelPrompt
 
 <#
     This script's model table(s) input
 #>
+write-host "Current user: $CurrentUser" -foreground "yellow"
+write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
+write-host "Current machine: $([Environment]::MachineName)" -foreground "yellow"
 $Tables = Read-Host -Prompt $ModelPrompt
 
 $script:startTime = Get-Date
-$CurrentUser
-[Environment]::UserDomainName
-[Environment]::MachineName
 write-host "Script Started at $script:startTime" -foreground "green"
-write-host "$ModelPrompt $Tables" -foreground "green"
 
 $PatternStart = '<DAT name=\"ULABEL\">'
 $PatternEnd = "</DAT>"
