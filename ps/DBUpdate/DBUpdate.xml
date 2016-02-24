@@ -18,7 +18,7 @@
   <TFSComponentFolder>Components</TFSComponentFolder>
   <TFSComponentExtension>cmx</TFSComponentExtension>
   
-  <ASNCoreRoot>D:\psUpdate\Core\</ASNCoreRoot>
+  <ASNCoreRoot>P:\CS08_2X\CS08_2_28\psUpdate\core\</ASNCoreRoot>
   <INICoreName>idf96.ini</INICoreName>
   <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
   <TempFileFolder>Temp</TempFileFolder>
@@ -29,16 +29,16 @@
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>C:\Users\mepro\Documents\GitHub\tools\ps\DBUpdate\cs\LoadUCDATA\bin\Release\LoadUCData.exe</Tool>
+		<Tool>P:\CS08_2X\CS08_2_28\psUpdate\bin\LoadUCData.exe</Tool>
 		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspaceRoot>D:\psUpdate\Messages\</TFSWorkspaceRoot>
+    <TFSWorkspaceRoot>H:\unicomp\CSCE\CS06\CS08.2.28\USYS\</TFSWorkspaceRoot>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>D:\psUpdate\Messages\</ASNMessagePath>
+    <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
-    <ResourcesGenerated>D:\psUpdate\Messages\resources\msg</ResourcesGenerated>
-    <ZipLocation>D:\psUpdate\Messages\7za.exe</ZipLocation>
+    <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\resources\msg</ResourcesGenerated>
+    <ZipLocation>P:\CS08_2X\CS08_2_28\psUpdate\bin\7za.exe</ZipLocation>
     <LogFolder>Logs</LogFolder>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
