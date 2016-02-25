@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<Settings>
+  <CoreVersion>2.28</CoreVersion>
+  <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
+  <PDriveRoot>P:\CS08_</PDriveRoot>
+  <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\bin\idf.exe</UnifaceIDFPath>
+  <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
+
+  <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
+  <TFSIncludeExtension>ipx</TFSIncludeExtension>
+  
+  <TFSGlobalFolder>GlobalProcs</TFSGlobalFolder>
+  <TFSGlobalExtension>prx</TFSGlobalExtension>
+
+  <TFSModelFolder>Models</TFSModelFolder>
+  <TFSModelExtension>xml</TFSModelExtension>
+
+  <TFSComponentFolder>Components</TFSComponentFolder>
+  <TFSComponentExtension>cmx</TFSComponentExtension>
+  
+  <ASNCoreRoot>P:\CS08_2X\CS08_2_28\psUpdate\core\</ASNCoreRoot>
+  <INICoreName>idf96.ini</INICoreName>
+  <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
+  <TempFileFolder>Temp</TempFileFolder>
+  <RefreshCore>
+      <LogFolder>Logs</LogFolder>
+      <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
+  </RefreshCore>
+	<LoadUCData>
+		<ASNFileName>idf.asn</ASNFileName>
+		<Tool>P:\CS08_2X\CS08_2_28\psUpdate\bin\LoadUCData.exe</Tool>
+		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
+	</LoadUCData>
+  <GenerateUARFile>
+    <TFSWorkspaceRoot>H:\unicomp\CSCE\CS06\CS08.2.28\USYS\</TFSWorkspaceRoot>
+    <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
+    <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
+    <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
+    <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\resources\msg</ResourcesGenerated>
+    <ZipLocation>P:\CS08_2X\CS08_2_28\psUpdate\bin\7za.exe</ZipLocation>
+    <LogFolder>Logs</LogFolder>
+    <SQLServer>
+      <Server>AL-SQL2K8R2-S01</Server>
+      <Database>Messages2xGenerated</Database>
+      <User>ital</User>
+      <Password>ital</Password>
+      <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
+    </SQLServer>
+  </GenerateUARFile>
+</Settings>

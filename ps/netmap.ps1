@@ -1,6 +1,7 @@
- // From a priv powershell you need to map your networked drives, like this:
- 
  <#
+    From a priv powershell you need to map your networked drives, like this:
+ 
+
  cd c:\tools
  $trigger = New-JobTrigger -AtStartup -RandomDelay 00:00:30
  $trigger
