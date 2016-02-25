@@ -25,7 +25,6 @@
   <RefreshCore>
       <LogFolder>Logs</LogFolder>
       <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
-      <LocalResourcesFolder>resources</LocalResourcesFolder>
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
