@@ -161,6 +161,7 @@ $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
 $INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
+$ResourcesCore = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\resources\msg"
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 if (-Not (Test-Path $ZipLocation))
 {
@@ -279,9 +280,18 @@ write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+$itemtime = Get-Date
+write-host "$(get-date) Robocopy messages to core $($MajorVersion).$($MinorVersion)" -foreground "green"
+robocopy $ResourcesGenerated $ResourcesCore /LOG:"$($TempFileLocation)robocopy_$($CurrentUser).log"
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
+cd $PSScriptRoot
+Convert-Path .
+cmd /c start powershell -Command {.\LoadUCData.ps1}
 
 $itemtime = Get-Date
-write-host "$(get-date) Generating UAR file" -foreground "green"
+write-host "$(get-date) Generating UAR (zip) file" -foreground "green"
 & $ZipLocation a -tzip $MessageNew $ResourcesGenerated\ | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
