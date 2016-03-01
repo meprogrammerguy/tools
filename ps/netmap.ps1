@@ -7,6 +7,10 @@
  $trigger
  Register-ScheduledJob -Trigger $trigger -FilePath "C:\tools\netmap.ps1" -Name netmap
  Get-ScheduledJob
+ 
+ To delete drives:
+  Net use driveletter: /delete
+ 
 #>
  net use p: \\al-devnas-s00\CS_Prod /persist:yes
  net use h: \\al-filesrv-s01\users\j_smith /persist:yes

@@ -49,6 +49,54 @@ else
 	write-host "settings from $($OverrideConfig)" -foreground "yellow"
 	[xml]$ConfigFile = Get-Content $OverrideConfig
 }
+
+<#
+    Networked drive mappings
+#>
+if (-Not (Test-Path h:))
+{
+  $UserHDrive = $ConfigFile.Settings.Network.User.$($CurrentUser).HDrive
+  if ($UserHDrive -gt "")
+  {
+    & net use h: $UserHDrive /persist:yes
+  }
+  if (-Not (Test-Path h:))
+  {
+    $WarnSetup = "network H:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
+
+if (-Not (Test-Path p:))
+{
+  $UserPDrive = $ConfigFile.Settings.Network.PDrive
+  if ($UserPDrive -gt "")
+  {
+    & net use p: $UserPDrive /persist:yes
+  }
+  if (-Not (Test-Path p:))
+  {
+    $WarnSetup = "network P:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
+
+if (-Not (Test-Path t:))
+{
+  $UserTDrive = $ConfigFile.Settings.Network.TDrive
+  if ($UserTDrive -gt "")
+  {
+    & net use t: $UserTDrive /persist:yes
+  }
+  if (-Not (Test-Path t:))
+  {
+    $WarnSetup = "network T:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
 if ($Pieces[1].Length -eq "")

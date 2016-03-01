@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
 <Settings>
+	<Network>
+		<User>
+			<jsmith>
+        <HDrive>\\al-filesrv-s01\users\j_smith</HDrive>
+			</jsmith>
+		</User>
+		<PDrive>\\al-devnas-s00\CS_Prod</PDrive>
+		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
+	</Network>
   <CoreVersion>2.28</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>

@@ -53,6 +53,57 @@ $MinorVersion = $Pieces[1]
 write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
 
 <#
+    Networked drive mappings
+#>
+write-host "Current user: $CurrentUser" -foreground "yellow"
+write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
+write-host "Current machine: $([Environment]::MachineName)" -foreground "yellow"
+
+if (-Not (Test-Path h:))
+{
+  $UserHDrive = $ConfigFile.Settings.Network.User.$($CurrentUser).HDrive
+  if ($UserHDrive -gt "")
+  {
+    & net use h: $UserHDrive /persist:yes
+  }
+  if (-Not (Test-Path h:))
+  {
+    $WarnSetup = "network H:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
+
+if (-Not (Test-Path p:))
+{
+  $UserPDrive = $ConfigFile.Settings.Network.PDrive
+  if ($UserPDrive -gt "")
+  {
+    & net use p: $UserPDrive /persist:yes
+  }
+  if (-Not (Test-Path p:))
+  {
+    $WarnSetup = "network P:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
+
+if (-Not (Test-Path t:))
+{
+  $UserTDrive = $ConfigFile.Settings.Network.TDrive
+  if ($UserTDrive -gt "")
+  {
+    & net use t: $UserTDrive /persist:yes
+  }
+  if (-Not (Test-Path t:))
+  {
+    $WarnSetup = "network T:\ Does not exist, You need to set this up first (New version?)"
+    write-host $WarnSetup -foreground "red"
+    Exit
+  }
+}
+<#
     Global config settings
 #>
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
@@ -120,9 +171,6 @@ $ModelPrompt = $ConfigFile.Settings.RefreshCore.ModelPrompt
 <#
     This script's model table(s) input
 #>
-write-host "Current user: $CurrentUser" -foreground "yellow"
-write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
-write-host "Current machine: $([Environment]::MachineName)" -foreground "yellow"
 $Tables = Read-Host -Prompt $ModelPrompt
 
 $script:startTime = Get-Date
