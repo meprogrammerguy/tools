@@ -11,7 +11,10 @@ function GetElapsedTime([datetime]$starttime)
 }
 $script:startTime = Get-Date
 write-host "LoadUCData Script Started at $script:startTime" -foreground "green"
-
+<#
+    Opens the settings file, looks into the ASNCore root folder for a settings file
+    If it finds a settings file there then that file is used.
+#>
 cd $PSScriptRoot
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
@@ -35,6 +38,7 @@ else
 }
 <#
     Networked drive mappings
+    Here is where the H:\, P:\ and T:\ drives are tested and set from the script (if they are not yet set up)
 #>
 write-host "Current user: $CurrentUser" -foreground "yellow"
 write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
@@ -84,6 +88,9 @@ if (-Not (Test-Path t:))
     Exit
   }
 }
+<#
+    This code parses out the Major and Minor version numbers
+#>
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
 if ($Pieces[1].Length -eq "")
@@ -96,7 +103,7 @@ $MinorVersion = $Pieces[1]
 write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
 
 <#
-    Global config settings
+    Global config settings from the Settings section
 #>
 $ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
@@ -114,7 +121,7 @@ if (-Not (Test-Path $TempFileLocation))
 }
 
 <#
-    This script's config settings
+    This script's config settings from the LoadUCData section
 #>
 $Tool = $ConfigFile.Settings.LoadUCData.Tool
 if (-Not (Test-Path $Tool))

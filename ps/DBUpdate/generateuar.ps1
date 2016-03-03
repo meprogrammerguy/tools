@@ -2,9 +2,14 @@
     Powershell GenerateUAR Script
 #>
 $Host.UI.RawUI.WindowTitle = "GenerateUAR Script (elevated)"
+<#
+    Adds the script snap ins and the SQL cmdlet module
+#> 
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
 Import-Module SqlPs -DisableNameChecking
-
+<#
+    this function parses the directory filespec and makes it meaningful for the TFS tools arguments
+#>
 function GetTFSSource([string]$DriveSource) 
 {
   $TFSSource = $DriveSource
@@ -13,7 +18,9 @@ function GetTFSSource([string]$DriveSource)
   $TFSSource  = "$/" + $Pieces[2] + "/" + $Pieces[3] + "/" + $Pieces[4] + "/" + $Pieces[5]
   $TFSSource 
 }
-
+<#
+    the elapsed time calculation function
+#>
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
@@ -29,6 +36,10 @@ write-host "Current machine: $([Environment]::MachineName)" -foreground "yellow"
 
 write-host "GenerateUAR Script Started at $script:startTime" -foreground "green"
 
+<#
+    Opens the settings file, looks into the ASNCore root folder for a settings file
+    If it finds a settings file there then that file is used.
+#>
 cd $PSScriptRoot
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
@@ -52,6 +63,7 @@ else
 
 <#
     Networked drive mappings
+    Here is where the H:\, P:\ and T:\ drives are tested and set from the script (if they are not yet set up)
 #>
 if (-Not (Test-Path h:))
 {
@@ -110,6 +122,7 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 
 <#
     Global config settings
+    if the tools or the directories are not found the script will warn and stop
 #>
 $UnifaceIDFPath = $ConfigFile.Settings.UnifaceIDFPath
 if (-Not (Test-Path $UnifaceIDFPath))
@@ -125,6 +138,9 @@ if (-Not (Test-Path $TFSToolPath))
   write-host $WarnSetup -foreground "red"
   Exit
 }
+<#
+    This code is because v3 and v2 have different directory naming conventions for the H:\ drive
+#>
 $HDriveSeparator = "."
 $HDriveRoot2 = "CS06"
 if ($MajorVersion -eq "3")
@@ -170,7 +186,9 @@ if (-Not (Test-Path $ZipLocation))
   Exit
 }
 $LogPath = $ASNMessagePath + $ConfigFile.Settings.GenerateUARFile.LogFolder + "\"
-
+<#
+    SQLserver settings used by the Invoke-Sqlcmd cmdlet (drop tables)
+#>
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
 $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database
 $theUser = $ConfigFile.Settings.GenerateUARFile.SQLServer.User
@@ -187,7 +205,10 @@ if ($Pieces[0] -gt "")
 		$QueryArray = $QueryArray + @("Drop table " + $Piece + ";")
 	}
 }
-
+<#
+    This section tries to check out the messagesgenerated file. If it is already locked the script shows
+    who, and stops. If it can loc the file it begins running 
+#>
 cd $TFSWorkspace
 Convert-Path .
 $LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs
@@ -212,7 +233,9 @@ else
   Exit
 }
 $LockTest
-
+<#
+    cleans up old log files (based on your user name)
+#>
 cd $LogPath
 Convert-Path .
 write-host "$(get-date) Removing old uniface log files" -foreground "green"
@@ -223,7 +246,9 @@ foreach ($file in Get-ChildItem -name)
     Remove-Item $file -force
   } 
 }
-
+<#
+    Drops tables uobj, ouobj, usource, and ousource
+#>
 write-host "$(get-date) Dropping tables" -foreground "green"
 $WarningPreference = 'SilentlyContinue'
 foreach ($Query in $QueryArray)
@@ -232,7 +257,9 @@ foreach ($Query in $QueryArray)
   Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $Query
 }
 $WarningPreference = 'Continue'
-
+<#
+    gets latest models from TFS does a /force to always get the latest
+#>
 cd $TFSModelPath
 Convert-Path .
 $itemtime = Get-Date
@@ -253,7 +280,9 @@ If (Test-Path $MessageOld)
 }
 write-host "$(get-date) Copying messagesgenerated.uar to messagesgenerated.old" -foreground "green"
 Copy-Item $TFSWorkspace\messagesgenerated.uar $MessageOld
-
+<#
+    removes the resources folder
+#>
 If (Test-Path $ResourcesGenerated)
 {
   $itemtime = Get-Date
@@ -262,7 +291,9 @@ If (Test-Path $ResourcesGenerated)
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
-
+<#
+    Import, analyze of the models and regenerating the messages
+#>
 $itemtime = Get-Date
 write-host "$(get-date) Importing Models" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /imp $ImportModels | Out-null
@@ -280,16 +311,26 @@ write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+
+<#
+    robocopying the messages to cores resources folder
+#>
 $itemtime = Get-Date
 write-host "$(get-date) Robocopy messages to core $($MajorVersion).$($MinorVersion)" -foreground "green"
 robocopy $ResourcesGenerated $ResourcesCore /LOG:"$($TempFileLocation)robocopy_$($CurrentUser).log"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+<#
+    kicking off the LoadUCData script
+#>
 cd $PSScriptRoot
 Convert-Path .
 cmd /c start powershell -Command {.\LoadUCData.ps1}
 
+<#
+    zipping up the resources\msg folder into messagesgenerated.uar
+#>
 $itemtime = Get-Date
 write-host "$(get-date) Generating UAR (zip) file" -foreground "green"
 & $ZipLocation a -tzip $MessageNew $ResourcesGenerated\ | Out-null
@@ -301,6 +342,10 @@ Copy-Item $MessageNew $TFSWorkspace -force
 $fileold = Get-Item $MessageOld
 $filenew = Get-Item $MessageNew
 
+<#
+    this is where the messagesgenerated file is checked into TFS. 
+    If the new file is smaller than the old file the file will not be checked in (you can do this by hand if you are sure everything is ok, first)
+#>
 cd $TFSWorkspace
 Convert-Path .
 if ($filenew.length -ge $fileold.length)

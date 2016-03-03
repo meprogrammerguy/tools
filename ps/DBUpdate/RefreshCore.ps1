@@ -4,6 +4,9 @@
 $Host.UI.RawUI.WindowTitle = "RefreshCore Script (elevated)"
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell -erroraction "silentlycontinue"
 
+<#
+    the elapsed time calculation function
+#>
 function GetElapsedTime([datetime]$starttime) 
 {
   $runtime = $(get-date) - $starttime
@@ -11,6 +14,9 @@ function GetElapsedTime([datetime]$starttime)
   $retStr
 }
 
+<#
+    this function parses the directory filespec and makes it meaningful for the TFS tools arguments
+#>
 function GetTFSSource([string]$DriveSource) 
 {
   $TFSSource = $DriveSource
@@ -20,6 +26,10 @@ function GetTFSSource([string]$DriveSource)
   $TFSSource 
 }
 
+<#
+    Opens the settings file, looks into the ASNCore root folder for a settings file
+    If it finds a settings file there then that file is used.
+#>
 cd $PSScriptRoot
 $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
@@ -54,6 +64,7 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 
 <#
     Networked drive mappings
+    Here is where the H:\, P:\ and T:\ drives are tested and set from the script (if they are not yet set up)
 #>
 write-host "Current user: $CurrentUser" -foreground "yellow"
 write-host "Current domain: $([Environment]::UserDomainName)" -foreground "yellow"
@@ -170,6 +181,7 @@ $ModelPrompt = $ConfigFile.Settings.RefreshCore.ModelPrompt
 
 <#
     This script's model table(s) input
+    You put in the tables to compile the forms for separated by commas
 #>
 $Tables = Read-Host -Prompt $ModelPrompt
 
@@ -188,7 +200,9 @@ if ($Pieces[0] -gt "")
 		$Patterns = $Patterns + @($PatternStart + $Piece + $PatternEnd)
 	}
 }
-
+<#
+    removing the old logs based on user name
+#>
 cd $LogPath
 Convert-Path .
 write-host "$(get-date) Removing old log files" -foreground "green"
@@ -199,7 +213,11 @@ foreach ($file in Get-ChildItem -name)
     Remove-Item $file -force -ErrorAction SilentlyContinue
   } 
 }
-
+<#
+    gets latest components, models and include procs from TFS. a /force is used to make sure
+    if you see a line having | Out-null this means for the script to wait until this line is done running before it continues
+    There are some cases where this is left off on purpose to speed up the script (be careful of this)
+#>
 cd $TFSComponentPath
 Convert-Path .
 $itemtime = Get-Date
@@ -224,6 +242,9 @@ write-host "$(get-date) Getting Latest Include Procs" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+<#
+    importing, analyzing the models, importing the include procs
+#>
 cd $ASNCorePath 
 Convert-Path .
 $itemtime = Get-Date
@@ -242,6 +263,10 @@ write-host "$(get-date) Importing Include Procs" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+<#
+    if the user pressed a CR instead of picking the tables then all Components are imported and compiled
+    otherwise only the forms having the entity will get recompiled
+#>
 cd $ASNCorePath
 Convert-Path .
 if ($Patterns.Count -le 0)
@@ -272,6 +297,9 @@ else
 		write-host "$(get-date) Importing $justname" -foreground "green"
 		& $UnifaceIDFPath $INICorePath /imp $ImportComponent\$justname.cmx | Out-null
 		write-host "$(get-date) Compiling $justname" -foreground "green"
+    <#
+        the | Out-null was left off of the below compile command on purpose (parallel processing happens here)
+    #>
 		& $UnifaceIDFPath $INICorePath /cpt $justname
 	}
 	$elapsed = GetElapsedTime $itemtime
