@@ -45,7 +45,7 @@
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
-    <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\resources\msg</ResourcesGenerated>
+    <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\2_28\resources\msg</ResourcesGenerated>
     <ZipLocation>P:\CS08_2X\CS08_2_28\psUpdate\bin\7za.exe</ZipLocation>
     <LogFolder>Logs</LogFolder>
     <SQLServer>
@@ -53,7 +53,7 @@
       <Database>Messages2xGenerated</Database>
       <User>ital</User>
       <Password>ital</Password>
-      <DropTableList>uobj,ouobj,usource,ousource</DropTableList>
+      <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup</DropTableList>
     </SQLServer>
   </GenerateUARFile>
 </Settings>
