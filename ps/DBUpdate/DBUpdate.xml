@@ -43,7 +43,8 @@
   <GenerateUARFile>
     <TFSWorkspaceRoot>H:\unicomp\CSCE\CS06\CS08.2.28\USYS\</TFSWorkspaceRoot>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
+    <ResourcesTranslated>P:\CS08_3X\CS08_3_12\psUpdate\messages\translate\resources\msg</ResourcesTranslated>
+    <ASNMessagePath>P:\CS08_3X\CS08_3_12\psUpdate\messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
     <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\2_28\resources\msg</ResourcesGenerated>
     <ZipLocation>P:\CS08_2X\CS08_2_28\psUpdate\bin\7za.exe</ZipLocation>

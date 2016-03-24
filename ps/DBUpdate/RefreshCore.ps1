@@ -253,7 +253,7 @@ write-host "$(get-date) Importing Models" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
-write-host "$(get-date) Analyizing Models" -foreground "green"
+write-host "$(get-date) Analyzing Models" -foreground "green"
 & $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"

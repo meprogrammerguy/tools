@@ -175,9 +175,11 @@ $MessageOld = $TempFileLocation + "\messagesgenerated.old"
 $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\"
+$INIMessageLocation = "/ini=" + $PDriveRoot  + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
-$ResourcesCore = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\resources\msg"
+$ResourcesTranslated = $ConfigFile.Settings.GenerateUARFile.ResourcesTranslated
+$ResourcesCore = $PDriveRoot + "\CS08_" + $MajorVersion + "_" + $MinorVersion + "\resources\msg"
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 if (-Not (Test-Path $ZipLocation))
 {
@@ -247,7 +249,8 @@ foreach ($file in Get-ChildItem -name)
   } 
 }
 <#
-    Drops tables uobj, ouobj, usource, and ousource
+    Drops tables from <DropTableList> found in XML settings file
+    These files are dropped so old stuff is not there (uniface "never" deletes)
 #>
 write-host "$(get-date) Dropping tables" -foreground "green"
 $WarningPreference = 'SilentlyContinue'
@@ -301,7 +304,7 @@ $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
-write-host "$(get-date) Analyizing Models" -foreground "green"
+write-host "$(get-date) Analyzing Models" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /con | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
@@ -317,9 +320,21 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 #>
 $itemtime = Get-Date
 write-host "$(get-date) Robocopy messages to core $($MajorVersion).$($MinorVersion)" -foreground "green"
-robocopy $ResourcesGenerated $ResourcesCore /LOG:"$($TempFileLocation)robocopy_$($CurrentUser).log"
+robocopy $ResourcesGenerated $ResourcesCore /LOG:"$($TempFileLocation)robocopy_core_$($CurrentUser).log"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+
+<#
+    robocopying translated R, S and Y messages (v3 only)
+#>
+if ($MajorVersion -eq "3")
+{
+$itemtime = Get-Date
+write-host "$(get-date) Robocopy translated R, S and Y messages (v3 only)" -foreground "green"
+robocopy $ResourcesTranslated $ResourcesGenerated  /LOG:"$($TempFileLocation)robocopy_trans_$($CurrentUser).log"
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+}
 
 <#
     kicking off the LoadUCData script
