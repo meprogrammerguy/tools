@@ -178,7 +178,6 @@ $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
 $PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\"
 $INIMessageLocation = "/ini=" + $PDriveRoot  + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
 $ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
-$ResourcesTranslated = $ConfigFile.Settings.GenerateUARFile.ResourcesTranslated
 $ResourcesCore = $PDriveRoot + "\CS08_" + $MajorVersion + "_" + $MinorVersion + "\resources\msg"
 $ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
 if (-Not (Test-Path $ZipLocation))
@@ -314,27 +313,6 @@ write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /tst gen_messages.aps RSY | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
-
-<#
-    robocopying the messages to cores resources folder
-#>
-$itemtime = Get-Date
-write-host "$(get-date) Robocopy messages to core $($MajorVersion).$($MinorVersion)" -foreground "green"
-robocopy $ResourcesGenerated $ResourcesCore /LOG:"$($TempFileLocation)robocopy_core_$($CurrentUser).log"
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
-
-<#
-    robocopying translated R, S and Y messages (v3 only)
-#>
-if ($MajorVersion -eq "3")
-{
-$itemtime = Get-Date
-write-host "$(get-date) Robocopy translated R, S and Y messages (v3 only)" -foreground "green"
-robocopy $ResourcesTranslated $ResourcesGenerated  /LOG:"$($TempFileLocation)robocopy_trans_$($CurrentUser).log"
-$elapsed = GetElapsedTime $itemtime
-write-host "Elapsed Time: " $elapsed -foreground "green"
-}
 
 <#
     kicking off the LoadUCData script

@@ -262,6 +262,11 @@ write-host "$(get-date) Importing Include Procs" -foreground "green"
 & $UnifaceIDFPath $INICorePath /imp $ImportIncludes | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
+$itemtime = Get-Date
+write-host "$(get-date) Generating R, S and Y messages" -foreground "green"
+& $UnifaceIDFPath $INICorePath /tst gen_messages.aps RSY | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
 
 <#
     if the user pressed a CR instead of picking the tables then all Components are imported and compiled
