@@ -48,6 +48,7 @@
 	</LoadUCData>
   <GenerateUARFile>
     <TFSWorkspaceRoot>H:\unicomp\CSCE\CS06\CS08.2.28\USYS\</TFSWorkspaceRoot>
+    <TranslateModels>H:\unicomp\CSCE\IDF\Models\</TranslateModels>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
     <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>

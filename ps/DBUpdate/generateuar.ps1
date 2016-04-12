@@ -153,6 +153,10 @@ $TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
 $ModelArgs = GetTFSSource $TFSModelPath
 $ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
 
+$TranslatePath = $ConfigFile.Settings.GenerateUARFile.TranslateModels
+$TranslateArgs = GetTFSSource $TranslatePath
+$TranslateModels = "XML:" + $TranslatePath + "*." + $ConfigFile.Settings.TFSModelExtension
+
 <#
     This script's config settings
 #>
@@ -270,6 +274,17 @@ write-host "$(get-date) Getting Latest Models" -foreground "green"
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
+<#
+    gets latest translation models from TFS does a /force to always get the latest
+#>
+cd $TranslatePath
+Convert-Path .
+$itemtime = Get-Date
+write-host "$(get-date) Getting Latest Translation Models" -foreground "green"
+& $TFSToolPath get /force $TranslateArgs | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
 cd $ASNMessagePath
 Convert-Path .
 If (Test-Path $MessageOld)
@@ -303,6 +318,12 @@ $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
+write-host "$(get-date) Importing Translation Models" -foreground "green"
+& $UnifaceIDFPath $INIMessageLocation /imp $TranslateModels | Out-null
+$elapsed = GetElapsedTime $itemtime
+write-host "Elapsed Time: " $elapsed -foreground "green"
+
+$itemtime = Get-Date
 write-host "$(get-date) Analyzing Models" -foreground "green"
 & $UnifaceIDFPath $INIMessageLocation /con | Out-null
 $elapsed = GetElapsedTime $itemtime
@@ -326,7 +347,7 @@ cmd /c start powershell -Command {.\LoadUCData.ps1}
 #>
 $itemtime = Get-Date
 write-host "$(get-date) Generating UAR (zip) file" -foreground "green"
-& $ZipLocation a -tzip $MessageNew $ResourcesGenerated\ | Out-null
+& $ZipLocation a -aoa -tzip $MessageNew $ResourcesGenerated\ | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 
