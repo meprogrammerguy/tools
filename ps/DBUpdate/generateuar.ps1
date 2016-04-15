@@ -50,7 +50,8 @@ if ($Pieces[1].Length -eq "")
 }
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_" + $MajorVersion + "_" + $MinorVersion + "\"
+$OverrideConfig = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
   write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
@@ -160,15 +161,15 @@ $TranslateModels = "XML:" + $TranslatePath + "*." + $ConfigFile.Settings.TFSMode
 <#
     This script's config settings
 #>
-$ASNMessagePath = $ConfigFile.Settings.GenerateUARFile.ASNMessagePath
-$TFSWorkspace = $ConfigFile.Settings.GenerateUARFile.TFSWorkspaceRoot
+$ASNMessagePath = $PDriveRoot + $ConfigFile.Settings.GenerateUARFile.ASNMessageFolder
+$TFSWorkspace = $TFSPath + $ConfigFile.Settings.GenerateUARFile.WorkspaceFolder
 if (-Not (Test-Path $TFSWorkspace))
 {
   $WarnSetup = $TFSWorkspace + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$TempFileLocation = $ASNMessagePath + $ConfigFile.Settings.TempFileFolder + "\"
+$TempFileLocation = $ASNMessagePath + "\"+ $ConfigFile.Settings.TempFileFolder + "\"
 if (-Not (Test-Path $TempFileLocation))
 {
   $WarnSetup = $TempFileLocation + " Does not exist, You need to set this up first (New version?)"
@@ -179,23 +180,26 @@ $MessageOld = $TempFileLocation + "\messagesgenerated.old"
 $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\"
-$INIMessageLocation = "/ini=" + $PDriveRoot  + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
-$ResourcesGenerated = $ConfigFile.Settings.GenerateUARFile.ResourcesGenerated
-$ResourcesCore = $PDriveRoot + "\CS08_" + $MajorVersion + "_" + $MinorVersion + "\resources\msg"
-$ZipLocation = $ConfigFile.Settings.GenerateUARFile.ZipLocation
+$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
+$ResourcesGenerated = $ASNMessagePath + "\" + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
+$ResourcesCore = $PDriveRoot + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
+$ZipLocation = $PDriveRoot + $ConfigFile.Settings.ToolFolder + "\" + $ConfigFile.Settings.GenerateUARFile.ZipName
 if (-Not (Test-Path $ZipLocation))
 {
   $WarnSetup = $ZipLocation + " Does not exist, You need to set this up first (New version?)"
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$LogPath = $ASNMessagePath + $ConfigFile.Settings.GenerateUARFile.LogFolder + "\"
+$LogPath = $ASNMessagePath + "\" + $ConfigFile.Settings.GenerateUARFile.LogFolder + "\"
 <#
     SQLserver settings used by the Invoke-Sqlcmd cmdlet (drop tables)
 #>
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
-$theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database
+$theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database2x
+if ($MajorVersion -eq "3")
+{
+  $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database3x
+}
 $theUser = $ConfigFile.Settings.GenerateUARFile.SQLServer.User
 $thePassword = $ConfigFile.Settings.GenerateUARFile.SQLServer.Password
 $theTables =  $ConfigFile.Settings.GenerateUARFile.SQLServer.DropTableList

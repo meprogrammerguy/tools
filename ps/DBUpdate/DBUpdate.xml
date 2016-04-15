@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
+  <CoreVersion>3.12</CoreVersion>
 	<Network>
 		<User>
 			<jsmith>
@@ -9,13 +10,18 @@
         <HDrive>\\al-filesrv-s01\users\jprewitt</HDrive>
 			</jprewitt>
 			<WGuo>
-        <HDrive>\\al-filesrv-s01\users\WGuo</HDrive>
-			</WGuo>		
+        <HDrive>\\al-filesrv-s01\users\r_guo</HDrive>
+			</WGuo>
+      <bcain>
+        <HDrive>\\al-filesrv-s01\users\bcain</HDrive>
+			</bcain>
+			<sburris>
+        <HDrive>\\al-filesrv-s01\users\sburris</HDrive>
+			</sburris>
 		</User>
 		<PDrive>\\al-devnas-s00\CS_Prod</PDrive>
 		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
 	</Network>
-  <CoreVersion>2.28</CoreVersion>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
   <UnifaceIDFPath>T:\UNIFACE\U9701\X100\common\BIN\idf.exe</UnifaceIDFPath>
@@ -33,9 +39,9 @@
   <TFSComponentFolder>Components</TFSComponentFolder>
   <TFSComponentExtension>cmx</TFSComponentExtension>
   
-  <ASNCoreRoot>P:\CS08_2X\CS08_2_28\psUpdate\core\</ASNCoreRoot>
-  <INICoreName>idf96.ini</INICoreName>
-  <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
+  <ASNCoreFolder>psUpdate\core</ASNCoreFolder>
+  <ToolFolder>psUpdate\bin</ToolFolder>
+  <INICoreLocation>USERS\MAIN\idf97.ini</INICoreLocation>
   <TempFileFolder>Temp</TempFileFolder>
   <RefreshCore>
       <LogFolder>Logs</LogFolder>
@@ -43,21 +49,22 @@
   </RefreshCore>
 	<LoadUCData>
 		<ASNFileName>idf.asn</ASNFileName>
-		<Tool>P:\CS08_2X\CS08_2_28\psUpdate\bin\LoadUCData.exe</Tool>
+		<ToolName>LoadUCData.exe</ToolName>
 		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
 	</LoadUCData>
   <GenerateUARFile>
-    <TFSWorkspaceRoot>H:\unicomp\CSCE\CS06\CS08.2.28\USYS\</TFSWorkspaceRoot>
+    <WorkspaceFolder>USYS</WorkspaceFolder>
     <TranslateModels>H:\unicomp\CSCE\IDF\Models\</TranslateModels>
     <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
-    <ASNMessagePath>P:\CS08_2X\CS08_2_28\psUpdate\messages\</ASNMessagePath>
+    <ASNMessageFolder>psUpdate\messages</ASNMessageFolder>
     <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
-    <ResourcesGenerated>P:\CS08_2X\CS08_2_28\psUpdate\messages\2_28\resources\msg</ResourcesGenerated>
-    <ZipLocation>P:\CS08_2X\CS08_2_28\psUpdate\bin\7za.exe</ZipLocation>
+    <ResourcesGeneratedFolder>resources\msg</ResourcesGeneratedFolder>
+    <ZipName>7za.exe</ZipName>
     <LogFolder>Logs</LogFolder>
     <SQLServer>
       <Server>AL-SQL2K8R2-S01</Server>
-      <Database>Messages2xGenerated</Database>
+      <Database2x>Messages2xGenerated</Database2x>
+      <Database3x>Messages3xGenerated</Database3x>
       <User>ital</User>
       <Password>ital</Password>
       <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup</DropTableList>

@@ -26,7 +26,8 @@ if ($Pieces[1].Length -eq "")
 }
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_" + $MajorVersion + "_" + $MinorVersion + "\"
+$OverrideConfig = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
   write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
@@ -105,7 +106,7 @@ write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magent
 <#
     Global config settings from the Settings section
 #>
-$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
+$ASNCorePath = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
 {
   $WarnSetup = $ASNCorePath + " Does not exist, You need to set this up first (New version?)"
@@ -123,7 +124,7 @@ if (-Not (Test-Path $TempFileLocation))
 <#
     This script's config settings from the LoadUCData section
 #>
-$Tool = $ConfigFile.Settings.LoadUCData.Tool
+$Tool = $PDriveRoot + $ConfigFile.Settings.ToolFolder + "\" + $ConfigFile.Settings.LoadUCData.ToolName
 if (-Not (Test-Path $Tool))
 {
   $WarnSetup = $Tool + " Does not exist, You need to set this up first (New version?)"
@@ -131,8 +132,7 @@ if (-Not (Test-Path $Tool))
   Exit
 }
 
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
-$LoadUCDataFile = $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
+$LoadUCDataFile = $PDriveRoot + $ConfigFile.Settings.LoadUCData.LoadUCDataFolder
 $LoadUCDataOld = $TempFileLocation + "LoadUCData.old"
 $LoadUCDataASN = $ASNCorePath + $ConfigFile.Settings.LoadUCData.ASNFileName
 $LoadUCDataTempFile = $TempFileLocation + "LoadUCData.sql"

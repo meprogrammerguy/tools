@@ -41,7 +41,8 @@ if ($Pieces[1].Length -eq "")
 }
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$OverrideConfig = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_" + $MajorVersion + "_" + $MinorVersion + "\"
+$OverrideConfig = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
   write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
@@ -138,7 +139,7 @@ if ($MajorVersion -eq "3")
   $HDriveSeparator = "_"
   $HDriveRoot2 = "CSPV6"
 }
-$ASNCorePath = $ConfigFile.Settings.ASNCoreRoot + $MajorVersion + "_" + $MinorVersion + "\"
+$ASNCorePath = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
 {
   $WarnSetup = $ASNCorePath + " Does not exist, You need to set this up first (New version?)"
@@ -152,8 +153,7 @@ if (-Not (Test-Path $TempFileLocation))
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_"
-$INICorePath = "/ini=" + $PDriveRoot + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.INICoreLocation
+$INICorePath = "/ini=" + $PDriveRoot  + $ConfigFile.Settings.INICoreLocation
 $TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
 
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
