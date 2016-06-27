@@ -70,4 +70,8 @@
       <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup</DropTableList>
     </SQLServer>
   </GenerateUARFile>
+  <CheckMessages>
+    <ASNLocation1>C:\v2_28\Clients</ASNLocation1>
+    <ASNLocation2>P:\CS08_2X\CS08_2_28\USERS\JRS</ASNLocation2>
+  </CheckMessages>
 </Settings>
