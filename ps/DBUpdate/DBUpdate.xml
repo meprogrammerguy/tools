@@ -1,23 +1,47 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>3.12</CoreVersion>
+  <CoreVersion>2.28</CoreVersion>
 	<Network>
 		<User>
 			<jsmith>
         <HDrive>\\al-filesrv-s01\users\j_smith</HDrive>
 			</jsmith>
+			<bhughes>
+				<HDrive>\\al-filesrv-s01\users\bhughes</HDrive>
+			</bhughes>
 			<jprewitt>
         <HDrive>\\al-filesrv-s01\users\jprewitt</HDrive>
 			</jprewitt>
 			<WGuo>
         <HDrive>\\al-filesrv-s01\users\r_guo</HDrive>
 			</WGuo>
+			<JZeng>
+        <HDrive>\\al-filesrv-s01\users\jzeng</HDrive>
+			</JZeng>
       <bcain>
         <HDrive>\\al-filesrv-s01\users\bcain</HDrive>
 			</bcain>
 			<sburris>
         <HDrive>\\al-filesrv-s01\users\sburris</HDrive>
 			</sburris>
+			<ajohnson>
+				<HDrive>\\al-filesrv-s01\users\ajohnson</HDrive>
+			</ajohnson>
+			<cmceuen>
+				<HDrive>\\al-filesrv-s01\users\cmceuen</HDrive>
+			</cmceuen>
+			<slavender>
+				<HDrive>\\al-filesrv-s01\users\slavender</HDrive>
+			</slavender>
+      <drish>
+				<HDrive>\\al-filesrv-s01\users\drish</HDrive>
+			</drish>
+			<jgilbert>
+				<HDrive>\\al-filesrv-s01\users\drish</HDrive>
+			</jgilbert>
+			<bkersey>
+				<HDrive>\\al-filesrv-s01\users\bkersey</HDrive>
+			</bkersey>
 		</User>
 		<PDrive>\\al-devnas-s00\CS_Prod</PDrive>
 		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
@@ -67,11 +91,7 @@
       <Database3x>Messages3xGenerated</Database3x>
       <User>ital</User>
       <Password>ital</Password>
-      <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup</DropTableList>
+      <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup,oucdtyp,ouform,ousource,ucdtyp,uckey,ucrelsh,uctable</DropTableList>
     </SQLServer>
   </GenerateUARFile>
-  <CheckMessages>
-    <ASNLocation1>C:\v2_28\Clients</ASNLocation1>
-    <ASNLocation2>P:\CS08_2X\CS08_2_28\USERS\JRS</ASNLocation2>
-  </CheckMessages>
 </Settings>
