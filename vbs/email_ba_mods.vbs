@@ -11,10 +11,9 @@ Main()
 Sub Main()
 Set fso=CreateObject("Scripting.FileSystemObject")
 
-input = "C:\Users\jsmith\Desktop\run.log"
+input = WScript.Arguments(0)
 listFile = fso.OpenTextFile(input).ReadAll
 listLines = Split(listFile, vbCrLf)
-i = 0
 
 For Each line In listLines
   str = MultilineTrim(LCase(line))
