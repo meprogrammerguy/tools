@@ -329,7 +329,7 @@ write-host "Elapsed Time: " $elapsed -foreground "green"
 
 $itemtime = Get-Date
 write-host "$(get-date) Analyzing Models" -foreground "green"
-& $UnifaceIDFPath $INIMessageLocation /con | Out-null
+& $UnifaceIDFPath $INIMessageLocation /con /inf | Out-null
 $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 

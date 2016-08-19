@@ -254,7 +254,7 @@ $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Analyzing Models" -foreground "green"
-& $UnifaceIDFPath $INICorePath /con | Out-null
+& $UnifaceIDFPath $INICorePath /con /inf | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
@@ -283,9 +283,9 @@ if ($Patterns.Count -le 0)
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /svc
+	& $UnifaceIDFPath $INICorePath /svc /inf
   write-host "$(get-date) Compiling all Forms (at the same time)" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /frm | Out-null
+	& $UnifaceIDFPath $INICorePath /frm /inf | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
@@ -305,7 +305,7 @@ else
     <#
         the | Out-null was left off of the below compile command on purpose (parallel processing happens here)
     #>
-		& $UnifaceIDFPath $INICorePath /cpt $justname
+		& $UnifaceIDFPath $INICorePath /cpt /inf $justname
 	}
 	$elapsed = GetElapsedTime $itemtime
 	write-host "Elapsed Time: " $elapsed -foreground "green"
