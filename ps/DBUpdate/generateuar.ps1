@@ -192,7 +192,7 @@ if (-Not (Test-Path $ZipLocation))
 }
 $LogPath = $ASNMessagePath + "\" + $ConfigFile.Settings.GenerateUARFile.LogFolder + "\"
 <#
-    SQLserver settings used by the Invoke-Sqlcmd cmdlet (drop tables)
+    SQLserver settings used by the Invoke-Sqlcmd cmdlet
 #>
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
 $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database2x
@@ -203,6 +203,12 @@ if ($MajorVersion -eq "3")
 $theUser = $ConfigFile.Settings.GenerateUARFile.SQLServer.User
 $thePassword = $ConfigFile.Settings.GenerateUARFile.SQLServer.Password
 $theTables =  $ConfigFile.Settings.GenerateUARFile.SQLServer.DropTableList
+$LockTable = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockTable
+$LockKey = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockKey
+$LockKeyValue = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockKeyValue
+$LockWho = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockWho
+$LockQuery = "select " + $LockWho + " from " + $LockTable + " where " + $LockKey + " = '" + $LockKeyValue + "'"
+$LockDelete = "delete from " + $LockTable + " where "+ $LockKey + " = '" + $LockKeyValue + "'"
 
 $Pieces = $theTables.split(",")
 if ($Pieces[0] -gt "")
@@ -214,9 +220,31 @@ if ($Pieces[0] -gt "")
 		$QueryArray = $QueryArray + @("Drop table " + $Piece + ";")
 	}
 }
+
+<#
+    Checks The Lock file And Bail if someone else is Generating messages (in any release)
+#>
+write-host "$(get-date) Checking the Lock File" -foreground "green"
+$WarningPreference = 'SilentlyContinue'
+write-host "$(get-date) $($LockQuery)" -foreground "green"
+$LockTest = Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $LockQuery
+$WarningPreference = 'Continue'
+if ($LockTest.length -gt 1)
+{
+  $itemtime = Get-Date
+  write-host "$(get-date) Someone is currently generating messages - exiting now" -foreground "red"
+  write-host ($LockTest | Format-Table | Out-String)
+  cd $PSScriptRoot
+  Convert-Path .
+  write-host "Script Ended at $(get-date)" -foreground "red"
+  $elapsed = GetElapsedTime $script:startTime
+  write-host "Total Elapsed Time: " $elapsed;
+  Exit
+}
+
 <#
     This section tries to check out the messagesgenerated file. If it is already locked the script shows
-    who, and stops. If it can loc the file it begins running 
+    who, and stops. If it can lock the file it begins running 
 #>
 cd $TFSWorkspace
 Convert-Path .
@@ -227,7 +255,6 @@ if ($LockTest -match "no pending")
   write-host "$(get-date) Checking out the messagesgenerated.uar file" -foreground "green"
   & $TFSToolPath get /force $MessageArgs | Out-null
   & $TFSToolPath checkout $MessageArgs | Out-null
-  $LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs | Out-null
 }
 else
 {
@@ -241,7 +268,17 @@ else
   write-host "Total Elapsed Time: " $elapsed;
   Exit
 }
+$LockTest = & $TFSToolPath status /user:* /format:detailed $MessageArgs
 $LockTest
+<#
+    Inserts The user currently running into the Lock file and continue
+#>
+write-host "$(get-date) Inserting user into the Lock File" -foreground "green"
+$WarningPreference = 'SilentlyContinue'
+$LockQuery = "insert into " + $LockTable + " values ('" + $LockKeyValue + "','" + $LockTest + "')"
+Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $LockQuery
+$WarningPreference = 'Continue'
+
 <#
     cleans up old log files (based on your user name)
 #>
@@ -384,6 +421,13 @@ else
 
 cd $PSScriptRoot
 Convert-Path .
+<#
+    Deletes The user currently running from the Lock file
+#>
+write-host "$(get-date) Deleting user From the Lock File" -foreground "green"
+$WarningPreference = 'SilentlyContinue'
+Invoke-Sqlcmd -ErrorAction silentlyContinue -WarningAction silentlyContinue -ServerInstance $theServer -Database $theDB -U $theUser -P $thePassword -Query $LockDelete
+$WarningPreference = 'Continue'
 $elapsed = GetElapsedTime $script:startTime
 write-host "Total Elapsed Time: " $elapsed -foreground "yellow"
 write-host "Script Ended at $(get-date)" -foreground "green"
