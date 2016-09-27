@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.27</CoreVersion>
+  <CoreVersion>2.29</CoreVersion>
 	<Network>
 		<User>
 			<jsmith>
@@ -37,18 +37,21 @@
 				<HDrive>\\al-filesrv-s01\users\drish</HDrive>
 			</drish>
 			<jgilbert>
-				<HDrive>\\al-filesrv-s01\users\drish</HDrive>
+				<HDrive>\\al-filesrv-s01\users\jgilbert</HDrive>
 			</jgilbert>
 			<bkersey>
 				<HDrive>\\al-filesrv-s01\users\bkersey</HDrive>
 			</bkersey>
+			<dscott>
+				<HDrive>\\al-filesrv-s01\users\dscott</HDrive>
+			</dscott>
 		</User>
 		<PDrive>\\al-devnas-s00\CS_Prod</PDrive>
 		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
 	</Network>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
   <PDriveRoot>P:\CS08_</PDriveRoot>
-  <UnifaceIDFPath>T:\UNIFACE\U9605\X505\common\BIN\idf.exe</UnifaceIDFPath>
+  <UnifaceIDFPath>T:\UNIFACE\U9701\X100\common\BIN\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
   <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
@@ -65,7 +68,7 @@
   
   <ASNCoreFolder>psUpdate\core</ASNCoreFolder>
   <ToolFolder>psUpdate\bin</ToolFolder>
-  <INICoreLocation>USERS\MAIN\idf96.ini</INICoreLocation>
+  <INICoreLocation>USERS\MAIN\idf97.ini</INICoreLocation>
   <TempFileFolder>Temp</TempFileFolder>
   <RefreshCore>
       <LogFolder>Logs</LogFolder>
