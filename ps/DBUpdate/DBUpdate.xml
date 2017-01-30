@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
-  <CoreVersion>2.29</CoreVersion>
+  <CoreVersion>CSV2.2017.1</CoreVersion>
 	<Network>
 		<User>
 			<jsmith>
@@ -42,6 +42,9 @@
 			<bkersey>
 				<HDrive>\\al-filesrv-s01\users\bkersey</HDrive>
 			</bkersey>
+      <gbordelon>
+        <HDrive>\\al-filesrv-s01\users\gbordelon</HDrive>
+      </gbordelon>
 			<dscott>
 				<HDrive>\\al-filesrv-s01\users\dscott</HDrive>
 			</dscott>
@@ -50,8 +53,8 @@
 		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
 	</Network>
   <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
-  <PDriveRoot>P:\CS08_</PDriveRoot>
-  <UnifaceIDFPath>T:\UNIFACE\U9701\X100\common\BIN\idf.exe</UnifaceIDFPath>
+  <PDriveRoot>P:\</PDriveRoot>
+  <UnifaceIDFPath>T:\UNIFACE\U9702\G202\common\BIN\idf.exe</UnifaceIDFPath>
   <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
 
   <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>

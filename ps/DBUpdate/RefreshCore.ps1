@@ -35,14 +35,11 @@ $CurrentUser = [Environment]::UserName
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
-if ($Pieces[1].Length -eq "")
-{
-  $Pieces = $CoreVersion.split("_")
-}
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_" + $MajorVersion + "_" + $MinorVersion + "\"
-$OverrideConfig = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+$ReleaseVersion = $Pieces[2]
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "\" + $MinorVersion + "." + $ReleaseVersion
+$OverrideConfig = $PDriveRoot + "\" + $ConfigFile.Settings.ASNCoreFolder + "\" + $MinorVersion + "." + $ReleaseVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
   write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
@@ -54,14 +51,11 @@ else
 }
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
-if ($Pieces[1].Length -eq "")
-{
-  $Pieces = $CoreVersion.split("_")
-}
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
+$ReleaseVersion = $Pieces[2]
   
-write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
+write-host "Core version: $($MajorVersion) $($MinorVersion).$($ReleaseVersion)" -foreground "magenta"
 
 <#
     Networked drive mappings
@@ -132,14 +126,9 @@ if (-Not (Test-Path $TFSToolPath))
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$HDriveSeparator = "."
-$HDriveRoot2 = "CS06"
-if ($MajorVersion -eq "3")
-{
-  $HDriveSeparator = "_"
-  $HDriveRoot2 = "CSPV6"
-}
-$ASNCorePath = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\"
+$HDriveRoot2 = $MajorVersion
+
+$ASNCorePath = $PDriveRoot + "\" + $ConfigFile.Settings.ASNCoreFolder + "\" + $MinorVersion + "." + $ReleaseVersion + "\"
 if (-Not (Test-Path $ASNCorePath))
 {
   $WarnSetup = $ASNCorePath + " Does not exist, You need to set this up first (New version?)"
@@ -153,8 +142,8 @@ if (-Not (Test-Path $TempFileLocation))
   write-host $WarnSetup -foreground "red"
   Exit
 }
-$INICorePath = "/ini=" + $PDriveRoot  + $ConfigFile.Settings.INICoreLocation
-$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
+$INICorePath = "/ini=" + $PDriveRoot  + "\" + $ConfigFile.Settings.INICoreLocation
+$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\" + $MinorVersion + "." + $ReleaseVersion + "\"
 
 $TFSIncludePath = $TFSPath + $ConfigFile.Settings.TFSIncludeFolder
 $TFSGlobalPath = $TFSPath + $ConfigFile.Settings.TFSGlobalFolder
@@ -254,7 +243,7 @@ $elapsed = GetElapsedTime $itemtime
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
 write-host "$(get-date) Analyzing Models" -foreground "green"
-& $UnifaceIDFPath $INICorePath /con /war | Out-null
+& $UnifaceIDFPath $INICorePath /con | Out-null
 $elapsed = GetElapsedTime $itemtime 
 write-host "Elapsed Time: " $elapsed -foreground "green"
 $itemtime = Get-Date
@@ -283,9 +272,9 @@ if ($Patterns.Count -le 0)
   write-host "Elapsed Time: " $elapsed -foreground "green"
   $itemtime = Get-Date
   write-host "$(get-date) Compiling all Services" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /svc /war
+	& $UnifaceIDFPath $INICorePath /svc
   write-host "$(get-date) Compiling all Forms (at the same time)" -foreground "green"
-	& $UnifaceIDFPath $INICorePath /frm /war | Out-null
+	& $UnifaceIDFPath $INICorePath /frm | Out-null
   $elapsed = GetElapsedTime $itemtime
   write-host "Elapsed Time: " $elapsed -foreground "green"
 }
@@ -305,7 +294,7 @@ else
     <#
         the | Out-null was left off of the below compile command on purpose (parallel processing happens here)
     #>
-		& $UnifaceIDFPath $INICorePath /cpt /war $justname
+		& $UnifaceIDFPath $INICorePath /cpt $justname
 	}
 	$elapsed = GetElapsedTime $itemtime
 	write-host "Elapsed Time: " $elapsed -foreground "green"

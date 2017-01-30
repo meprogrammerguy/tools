@@ -44,14 +44,11 @@ cd $PSScriptRoot
 [xml]$ConfigFile = Get-Content DBUpdate.xml
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
-if ($Pieces[1].Length -eq "")
-{
-  $Pieces = $CoreVersion.split("_")
-}
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
-$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\CS08_" + $MajorVersion + "_" + $MinorVersion + "\"
-$OverrideConfig = $PDriveRoot + $ConfigFile.Settings.ASNCoreFolder + "\" + $MajorVersion + "_" + $MinorVersion + "\DBUpdate.xml"
+$ReleaseVersion = $Pieces[2]
+$PDriveRoot = $ConfigFile.Settings.PDriveRoot + $MajorVersion + "\" + $MinorVersion + "." + $ReleaseVersion
+$OverrideConfig = $PDriveRoot + "\" + $ConfigFile.Settings.ASNCoreFolder + "\" + $MinorVersion + "." + $ReleaseVersion + "\DBUpdate.xml"
 if (-Not(Test-Path $OverrideConfig))
 {
   write-host "settings from $($PSScriptRoot)\DBUpdate.xml" -foreground "yellow"
@@ -112,14 +109,11 @@ if (-Not (Test-Path t:))
 }
 $CoreVersion = $ConfigFile.Settings.CoreVersion
 $Pieces = $CoreVersion.split(".")
-if ($Pieces[1].Length -eq "")
-{
-  $Pieces = $CoreVersion.split("_")
-}
 $MajorVersion = $Pieces[0]
 $MinorVersion = $Pieces[1]
+$ReleaseVersion = $Pieces[2]
 
-write-host "Core version: $($MajorVersion).$($MinorVersion)" -foreground "magenta"
+write-host "Core version: $($MajorVersion) $($MinorVersion).$($ReleaseVersion)" -foreground "magenta"
 
 <#
     Global config settings
@@ -142,14 +136,9 @@ if (-Not (Test-Path $TFSToolPath))
 <#
     This code is because v3 and v2 have different directory naming conventions for the H:\ drive
 #>
-$HDriveSeparator = "."
-$HDriveRoot2 = "CS06"
-if ($MajorVersion -eq "3")
-{
-  $HDriveSeparator = "_"
-  $HDriveRoot2 = "CSPV6"
-}
-$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\CS08" + $HDriveSeparator + $MajorVersion + $HDriveSeparator + $MinorVersion + "\"
+$HDriveRoot2 = $MajorVersion
+
+$TFSPath = $ConfigFile.Settings.HDriveRoot + $HDriveRoot2 + "\" + $MinorVersion + "." + $ReleaseVersion + "\"
 $TFSModelPath = $TFSPath + $ConfigFile.Settings.TFSModelFolder
 $ModelArgs = GetTFSSource $TFSModelPath
 $ImportModels = "XML:" + $TFSModelPath + "\*." + $ConfigFile.Settings.TFSModelExtension
@@ -161,7 +150,7 @@ $TranslateModels = "XML:" + $TranslatePath + "*." + $ConfigFile.Settings.TFSMode
 <#
     This script's config settings
 #>
-$ASNMessagePath = $PDriveRoot + $ConfigFile.Settings.GenerateUARFile.ASNMessageFolder
+$ASNMessagePath = $PDriveRoot + "\" + $ConfigFile.Settings.GenerateUARFile.ASNMessageFolder
 $TFSWorkspace = $TFSPath + $ConfigFile.Settings.GenerateUARFile.WorkspaceFolder
 if (-Not (Test-Path $TFSWorkspace))
 {
@@ -180,10 +169,10 @@ $MessageOld = $TempFileLocation + "\messagesgenerated.old"
 $MessageNew =  $TempFileLocation + "\messagesgenerated.uar"
 $MessageArgs = GetTFSSource $TFSPath
 $MessageArgs = $MessageArgs + $ConfigFile.Settings.GenerateUARFile.MessageArgs
-$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "X\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
-$ResourcesGenerated = $ASNMessagePath + "\" + $MajorVersion + "_" + $MinorVersion + "\" + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
-$ResourcesCore = $PDriveRoot + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
-$ZipLocation = $PDriveRoot + $ConfigFile.Settings.ToolFolder + "\" + $ConfigFile.Settings.GenerateUARFile.ZipName
+$INIMessageLocation = "/ini=" + $ConfigFile.Settings.PDriveRoot + $MajorVersion + "\" + $ConfigFile.Settings.GenerateUARFile.INIMessageLocation
+$ResourcesGenerated = $ASNMessagePath + "\" + $MinorVersion + "." + $ReleaseVersion + "\" + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
+$ResourcesCore = $PDriveRoot + "\" + $ConfigFile.Settings.GenerateUARFile.ResourcesGeneratedFolder
+$ZipLocation = $PDriveRoot + "\" + $ConfigFile.Settings.ToolFolder + "\" + $ConfigFile.Settings.GenerateUARFile.ZipName
 if (-Not (Test-Path $ZipLocation))
 {
   $WarnSetup = $ZipLocation + " Does not exist, You need to set this up first (New version?)"
@@ -196,7 +185,7 @@ $LogPath = $ASNMessagePath + "\" + $ConfigFile.Settings.GenerateUARFile.LogFolde
 #>
 $theServer = $ConfigFile.Settings.GenerateUARFile.SQLServer.Server
 $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database2x
-if ($MajorVersion -eq "3")
+if ($MajorVersion -eq "CSV3")
 {
   $theDB = $ConfigFile.Settings.GenerateUARFile.SQLServer.Database3x
 }
