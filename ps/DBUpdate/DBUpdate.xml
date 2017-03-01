@@ -92,12 +92,12 @@
     <ZipName>7za.exe</ZipName>
     <LogFolder>Logs</LogFolder>
     <SQLServer>
-      <Server>AL-SQL2K8R2-S01</Server>
+      <Server>AL-SQL2K14-S01</Server>
       <Database2x>Messages2xGenerated</Database2x>
       <Database3x>Messages3xGenerated</Database3x>
       <User>ital</User>
       <Password>ital</Password>
-      <DropTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup,oucdtyp,ouform,ousource,ucdtyp,uckey,ucrelsh,uctable</DropTableList>
+      <DeleteTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup,oucdtyp,ouform,ousource,ucdtyp,uckey,ucrelsh,uctable</DeleteTableList>
       <LockTable>pslock</LockTable>
       <LockKey>psKey</LockKey>
       <LockKeyValue>LOCK</LockKeyValue>

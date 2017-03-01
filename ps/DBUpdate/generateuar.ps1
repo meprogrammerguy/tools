@@ -191,7 +191,7 @@ if ($MajorVersion -eq "CSV3")
 }
 $theUser = $ConfigFile.Settings.GenerateUARFile.SQLServer.User
 $thePassword = $ConfigFile.Settings.GenerateUARFile.SQLServer.Password
-$theTables =  $ConfigFile.Settings.GenerateUARFile.SQLServer.DropTableList
+$theTables =  $ConfigFile.Settings.GenerateUARFile.SQLServer.DeleteTableList
 $LockTable = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockTable
 $LockKey = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockKey
 $LockKeyValue = $ConfigFile.Settings.GenerateUARFile.SQLServer.LockKeyValue
@@ -206,7 +206,7 @@ if ($Pieces[0] -gt "")
 	foreach ($Piece in $Pieces)
 	{
 		$Piece = $Piece.ToUpper()
-		$QueryArray = $QueryArray + @("Drop table " + $Piece + ";")
+		$QueryArray = $QueryArray + @("Delete from " + $Piece + ";")
 	}
 }
 
@@ -282,10 +282,10 @@ foreach ($file in Get-ChildItem -name)
   } 
 }
 <#
-    Drops tables from <DropTableList> found in XML settings file
-    These files are dropped so old stuff is not there (uniface "never" deletes)
+    Delete from tables from <DeleteTableList> found in XML settings file
+    These columns are deleted so old stuff is not there (uniface "never" deletes)
 #>
-write-host "$(get-date) Dropping tables" -foreground "green"
+write-host "$(get-date) Deleting from tables" -foreground "green"
 $WarningPreference = 'SilentlyContinue'
 foreach ($Query in $QueryArray)
 {
