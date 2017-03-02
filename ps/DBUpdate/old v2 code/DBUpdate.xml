@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<Settings>
+  <CoreVersion>2.29</CoreVersion>
+	<Network>
+		<User>
+			<jsmith>
+				<HDrive>\\al-filesrv-s01\users\j_smith</HDrive>
+			</jsmith>
+			<bhughes>
+				<HDrive>\\al-filesrv-s01\users\bhughes</HDrive>
+			</bhughes>
+			<jprewitt>
+				<HDrive>\\al-filesrv-s01\users\jprewitt</HDrive>
+			</jprewitt>
+			<WGuo>
+				<HDrive>\\al-filesrv-s01\users\r_guo</HDrive>
+			</WGuo>
+			<JZeng>
+        <HDrive>\\al-filesrv-s01\users\jzeng</HDrive>
+			</JZeng>
+      <bcain>
+        <HDrive>\\al-filesrv-s01\users\bcain</HDrive>
+			</bcain>
+			<sburris>
+				<HDrive>\\al-filesrv-s01\users\sburris</HDrive>
+			</sburris>
+			<ajohnson>
+				<HDrive>\\al-filesrv-s01\users\ajohnson</HDrive>
+			</ajohnson>
+			<cmceuen>
+				<HDrive>\\al-filesrv-s01\users\cmceuen</HDrive>
+			</cmceuen>
+			<slavender>
+				<HDrive>\\al-filesrv-s01\users\slavender</HDrive>
+			</slavender>
+      <drish>
+				<HDrive>\\al-filesrv-s01\users\drish</HDrive>
+			</drish>
+			<jgilbert>
+				<HDrive>\\al-filesrv-s01\users\jgilbert</HDrive>
+			</jgilbert>
+			<bkersey>
+				<HDrive>\\al-filesrv-s01\users\bkersey</HDrive>
+			</bkersey>
+      <gbordelon>
+        <HDrive>\\al-filesrv-s01\users\gbordelon</HDrive>
+      </gbordelon>
+			<dscott>
+				<HDrive>\\al-filesrv-s01\users\dscott</HDrive>
+			</dscott>
+		</User>
+		<PDrive>\\al-devnas-s00\CS_Prod</PDrive>
+		<TDrive>\\al-devnas-s00\Dev_tools</TDrive>
+	</Network>
+  <HDriveRoot>H:\unicomp\CSCE\</HDriveRoot>
+  <PDriveRoot>P:\CS08_</PDriveRoot>
+  <UnifaceIDFPath>t:\UNIFACE\U9702\G202\common\BIN\idf.exe</UnifaceIDFPath>
+  <TFSToolPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe</TFSToolPath>
+
+  <TFSIncludeFolder>IncludeProcs</TFSIncludeFolder>
+  <TFSIncludeExtension>ipx</TFSIncludeExtension>
+  
+  <TFSGlobalFolder>GlobalProcs</TFSGlobalFolder>
+  <TFSGlobalExtension>prx</TFSGlobalExtension>
+
+  <TFSModelFolder>Models</TFSModelFolder>
+  <TFSModelExtension>xml</TFSModelExtension>
+
+  <TFSComponentFolder>Components</TFSComponentFolder>
+  <TFSComponentExtension>cmx</TFSComponentExtension>
+  
+  <ASNCoreFolder>psUpdate\core</ASNCoreFolder>
+  <ToolFolder>psUpdate\bin</ToolFolder>
+  <INICoreLocation>USERS\MAIN\idf97.ini</INICoreLocation>
+  <TempFileFolder>Temp</TempFileFolder>
+  <RefreshCore>
+      <LogFolder>Logs</LogFolder>
+      <ModelPrompt>RefreshCore script - Table(s) ordr,schl or (cr = all[slow])</ModelPrompt>
+  </RefreshCore>
+	<LoadUCData>
+		<ASNFileName>idf.asn</ASNFileName>
+		<ToolName>LoadUCData.exe</ToolName>
+		<LoadUCDataFolder>UTILS\LoadUCData.sql</LoadUCDataFolder>
+	</LoadUCData>
+  <GenerateUARFile>
+    <WorkspaceFolder>USYS</WorkspaceFolder>
+    <TranslateModels>H:\unicomp\CSCE\IDF\Models\</TranslateModels>
+    <MessageArgs>USYS/messagesgenerated.uar</MessageArgs>
+    <ASNMessageFolder>psUpdate\messages</ASNMessageFolder>
+    <INIMessageLocation>MessagesGenerated\USERS\MAIN\idf96.ini</INIMessageLocation>
+    <ResourcesGeneratedFolder>resources\msg</ResourcesGeneratedFolder>
+    <ZipName>7za.exe</ZipName>
+    <LogFolder>Logs</LogFolder>
+    <SQLServer>
+      <Server>AL-SQL2K14-S01</Server>
+      <Database2x>Messages2xGenerated</Database2x>
+      <Database3x>Messages3xGenerated</Database3x>
+      <User>ital</User>
+      <Password>ital</Password>
+      <DeleteTableList>uobj,ouobj,usource,ousource,ucfield,ucgroup,oucdtyp,ouform,ousource,ucdtyp,uckey,ucrelsh,uctable</DeleteTableList>
+      <LockTable>pslock</LockTable>
+      <LockKey>psKey</LockKey>
+      <LockKeyValue>LOCK</LockKeyValue>
+      <LockWho>psWho</LockWho>
+    </SQLServer>
+  </GenerateUARFile>
+</Settings>
