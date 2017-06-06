@@ -4,6 +4,7 @@ Powershell PutAutoBuild
     It then deletes the Working Dir (does not auto checkin the file)
     (Now also Does the v3 HF script)
 #>
+$status1 = Copy-Item C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_2XXX.bld H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild_2XXX.bld -PassThru -ErrorAction silentlyContinue
 $status1 = Copy-Item C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.bld H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild.bld -PassThru -ErrorAction silentlyContinue
 $status2 = Copy-Item C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_hf.bld H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild_hf.bld -PassThru -ErrorAction silentlyContinue
 if ($status1 -And $status2)

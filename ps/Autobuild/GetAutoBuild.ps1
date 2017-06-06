@@ -6,6 +6,10 @@
     ( Added v3 HF script to this tool as well)
 #>
 New-Item -Force -ItemType directory -Path C:\Users\jsmith\Desktop\AutoBuild
+Copy-Item \\al-csbuild-s04\c\build\COMMANDseries\COMMANDseriesBuild_2XXX.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_2XXX.s04
+Copy-Item \\al-csbuild-s05\c\build\COMMANDseries\COMMANDseriesBuild_2XXX.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_2XXX.s05
+Copy-Item \\al-csbuild-vm1\build\COMMANDseries\COMMANDseriesBuild_2XXX.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_2XXX.vm1
+
 Copy-Item \\al-csbuild-s04\c\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s04
 Copy-Item \\al-csbuild-s05\c\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.s05
 Copy-Item \\al-csbuild-vm1\build\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.vm1
@@ -16,6 +20,10 @@ Copy-Item \\al-csbuild-vm1\build\COMMANDseries\COMMANDseriesBuild_hf.bld C:\User
 
 h:
 cd H:\unicomp\AutoBuild\COMMANDseries
+$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get /force $/AutoBuild/COMMANDseries/COMMANDseriesBuild_2XXX.bld /noprompt
+$tf | Out-null
+$tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" checkout $/AutoBuild/COMMANDseries/COMMANDseriesBuild_2XXX.bld /noprompt
+$tf | Out-null
 $tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" get /force $/AutoBuild/COMMANDseries/COMMANDseriesBuild.bld /noprompt
 $tf | Out-null
 $tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" checkout $/AutoBuild/COMMANDseries/COMMANDseriesBuild.bld /noprompt
@@ -27,6 +35,8 @@ $tf = &"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\tf.exe" 
 $tf | Out-null
 
 c:
+Copy-Item H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild_2XXX.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_2XXX.bld
+
 Copy-Item H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild.bld
 
 Copy-Item H:\unicomp\AutoBuild\COMMANDseries\COMMANDseriesBuild_hf.bld C:\Users\jsmith\Desktop\AutoBuild\COMMANDseriesBuild_hf.bld
