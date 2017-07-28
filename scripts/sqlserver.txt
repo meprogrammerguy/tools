@@ -88,6 +88,7 @@ select count(order_code) as order_count, min(update_date) as oldest_date,max(upd
 select count(tkt_code),min(update_date) as earliest_date,max(update_date) as newest_date from tick where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
 ***
 MS-Mobile Signaling
+select count(t.truck_code) as valid_truck from sigu s join truc t on t.signl_unit_code = s.signl_unit_code where t.gps_flag = 1 and t.auto_status_flag = 1 and t.signl_unit_code is not null
 MT-Map Truck Tracking
 OE-Order Entry & Ticketing
 OL-Overhead Loadout
@@ -99,6 +100,8 @@ PP-Pricing & Prep
 PR-Contribution Reports
 PS-Product Sales Option
 QU-Quotations
+  select count(quote_code),min(update_date) as earliest_date,max(update_date) as newest_date from quot
+  select count(job_id),min(update_date) as earliest_date,max(update_date) as newest_date from jobs
 RO-Rostering
 RP-Replication Services
 SC-ScheduleCom
