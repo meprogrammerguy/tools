@@ -1,0 +1,113 @@
+== all licenses and descriptions
+select  SUBSTRING(ucomment, CHARINDEX('|', ucomment)+1, CHARINDEX('</UTEXT>',ucomment) - CHARINDEX('|', ucomment) + Len('<UTEXT>')-8) as license,SUBSTRING(ucomment, CHARINDEX('<UTEXT>', ucomment)+7, CHARINDEX('|',ucomment) - CHARINDEX('<UTEXT>', ucomment) + Len('|')-8) as descr  from usource where ulabel like 'MSG_CAPPL%[0-9][0-9]' and ulan = 'USA' order by license
+== all forms priv by license
+select  ulabel,SUBSTRING(ucomment, CHARINDEX('(', ucomment), CHARINDEX(')',ucomment) - CHARINDEX('(', ucomment) + Len(')')) as license  from usource where ulabel like 'MSG_X%' and ulan = 'USA' and ucomment like '%<UTEXT>(%)%'
+== forms containig a menu priv (example inventory only forms)
+declare @license varchar(2)
+set @license = 'IV'
+select  substring(ulabel,6,len(ulabel)) as uform,ulabel,SUBSTRING(ucomment, CHARINDEX('(', ucomment), CHARINDEX(')',ucomment) - CHARINDEX('(', ucomment) + Len(')')) as license  from usource where ulabel like 'MSG_X%' and ulan = 'USA' and (ucomment like '%L:'+@license+'%' or ucomment like '%,'+@license+'%' or ucomment like '%'+@license+')%'  )
+== all services
+select uspecnam,udescr from usspec where udefpath = 'SVC'
+== all forms
+select uspecnam,udescr from usspec where udefpath = 'FRM'
+== all fields and tables by form
+select ulabel,grp,uform from uxfield where uform = 'EDTORDR' order by grp,ulabel
+== all tables by form
+select ulabel,uform from uxgroup where uform = 'EDTORDR' order by ulabel
+== all component variables per form
+select u_formlib,u_name,u_dtyp,u_layout from  uxregs where u_formlib = 'EDTORDR'
+== all the stupid $regsxx$ component variables
+select u_formlib,u_name,u_dtyp,u_layout from  uxregs where u_name like 'REG%' order by u_formlib
+== all forms using a license
+declare @license varchar(2)
+set @license = 'MO'
+select SUBSTRING(tplactual, CHARINDEX('$1 = "'+@license, tplactual)+6,2) as license,ulabel from uform where tplactual like '%$1 = "'+@license+'"%'
+==
+AL-Auto-Loadout
+AP-Accounts Payable
+AR-Accounts Receivable
+AS-Auto-Statusing
+AT-Auto-Ticketing
+AU-Auditing
+BI-Batch Computer Interfaces
+CA-Aggregate Dispatch
+CB-Block & Building Material Dispatch
+CC-Concrete Dispatch
+CD-Asphalt
+CE-Eagle Batching
+CI-Color Interface
+CO-Concrete Optimization
+CP-COMMANDperformance
+CR-Credit Checking
+CT-Cartage
+CW-COMMANDwriter
+DA-Data Archiving
+DC-Driver Call In Management
+DI-Document Imaging
+DS-Dynamic Scheduling
+EX-COMMANDexecutive
+FL-COMMANDfleet
+FN-Fiscal Note Interface
+FS-Flat Scale Interfaces
+GL-General Ledger
+GM-Windows Tracking and Scheduling
+GP-Graphic Performance Monitor
+ID-Caller Identification
+IG-Invoicing
+IN-Inform Interface
+IV-Inventory
+***
+LN-Liens
+== number of liens and oldest and newest dates
+select count(lien_loc_code),min(update_date) as early_date,max(update_date) as newest_date from lnhd
+***
+MM-Material Manager
+***
+MO-Map Order Entry
+== number of mapped plants
+select count(plant_code) from plnt where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped projects
+select count(proj_code) from proj where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped quotes
+select count(quote_code) from quot where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped jobs
+select count(job_id) from jobs where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped lien locations
+select count(lien_loc_code) from lnhd where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped trucks
+select count(truck_code) from truc where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== earliest and last mapped date
+select max(map_update_date) as last_mapped,min(map_update_date) as first_mapped from truc where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== orders with long and lat
+select order_date,order_code,map_lat,map_long,map_radius,map_updt_ordr_coord_flag,map_truck_poll_type from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== orders with coordinates mapped in tracking 
+select order_date,order_code,map_lat,map_long,map_radius,map_updt_ordr_coord_flag,map_truck_poll_type from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000' and map_updt_ordr_coord_flag = 1
+== count of orders mapped and oldest and newest dates in tracking
+select count(order_code) as order_count, min(update_date) as oldest_date,max(update_date) as newest_date from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000' and map_updt_ordr_coord_flag = 1
+== count of tickets mapped and earliest and newest dates
+select count(tkt_code),min(update_date) as earliest_date,max(update_date) as newest_date from tick where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+***
+MS-Mobile Signaling
+MT-Map Truck Tracking
+OE-Order Entry & Ticketing
+OL-Overhead Loadout
+OM-Order Monitoring
+PC-Credit Card Payment Processing
+PM-Pump Services
+PO-Purchasing
+PP-Pricing & Prep
+PR-Contribution Reports
+PS-Product Sales Option
+QU-Quotations
+RO-Rostering
+RP-Replication Services
+SC-ScheduleCom
+SH-Scheduling
+SR-Sales Reports
+SS-Sample Scheduling
+ST-Snail Trail
+SV-Services
+TA-Time Analysis
+TF-Traffic Restrictions
+TT-Truck Tracking
+WA-Water Added
