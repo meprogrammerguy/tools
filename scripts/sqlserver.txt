@@ -1,8 +1,9 @@
+running against CSV2_2017_1_MAIN_REP or CSV2_2017_1_JRS_DAT
 == all licenses and descriptions
 select  SUBSTRING(ucomment, CHARINDEX('|', ucomment)+1, CHARINDEX('</UTEXT>',ucomment) - CHARINDEX('|', ucomment) + Len('<UTEXT>')-8) as license,SUBSTRING(ucomment, CHARINDEX('<UTEXT>', ucomment)+7, CHARINDEX('|',ucomment) - CHARINDEX('<UTEXT>', ucomment) + Len('|')-8) as descr  from usource where ulabel like 'MSG_CAPPL%[0-9][0-9]' and ulan = 'USA' order by license
 == all forms priv by license
 select  ulabel,SUBSTRING(ucomment, CHARINDEX('(', ucomment), CHARINDEX(')',ucomment) - CHARINDEX('(', ucomment) + Len(')')) as license  from usource where ulabel like 'MSG_X%' and ulan = 'USA' and ucomment like '%<UTEXT>(%)%'
-== forms containig a menu priv (example inventory only forms)
+== forms containing a menu priv (example inventory only forms)
 declare @license varchar(2)
 set @license = 'IV'
 select  substring(ulabel,6,len(ulabel)) as uform,ulabel,SUBSTRING(ucomment, CHARINDEX('(', ucomment), CHARINDEX(')',ucomment) - CHARINDEX('(', ucomment) + Len(')')) as license  from usource where ulabel like 'MSG_X%' and ulan = 'USA' and (ucomment like '%L:'+@license+'%' or ucomment like '%,'+@license+'%' or ucomment like '%'+@license+')%'  )
@@ -22,18 +23,34 @@ select u_formlib,u_name,u_dtyp,u_layout from  uxregs where u_name like 'REG%' or
 declare @license varchar(2)
 set @license = 'MO'
 select SUBSTRING(tplactual, CHARINDEX('$1 = "'+@license, tplactual)+6,2) as license,ulabel from uform where tplactual like '%$1 = "'+@license+'"%'
+== menus by license
+select umenu,uvar,ucascade,ucomment from usitem where  ulan = 'USA' and ucomment like '%$$lrn_apptyp%'
 ==
 AL-Auto-Loadout
+select count (k.auto_tkt_unit_code), min(k.update_date) as first_date, max(k.update_date) as last_date from autk k,autl l where (k.auto_tkt_unit_code = l.auto_tkt_unit_code)
 AP-Accounts Payable
 AR-Accounts Receivable
+select YEAR(batch_DATE) YEAR,MONTH(batch_DATE) MONTH,count(*) as total_count from arhd group by year(batch_date),month(batch_date) order by year,month
 AS-Auto-Statusing
 AT-Auto-Ticketing
 AU-Auditing
+== order audit
+select min(audit_log_date),max(audit_log_date),count(*) from audo
+== newer audit
+select YEAR(audit_DATE) YEAR,MONTH(audit_DATE) MONTH,count(*) as total_count from audt group by year(audit_date),month(audit_date) order by year,month
 BI-Batch Computer Interfaces
 CA-Aggregate Dispatch
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CA' group by year(order_date),month(order_date) order by year,month
+select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CA' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 CB-Block & Building Material Dispatch
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CB' group by year(order_date),month(order_date) order by year,month
+select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CB' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 CC-Concrete Dispatch
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CC' group by year(order_date),month(order_date) order by year,month
+select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 CD-Asphalt
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CD' group by year(order_date),month(order_date) order by year,month
+select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CD' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 CE-Eagle Batching
 CI-Color Interface
 CO-Concrete Optimization
@@ -50,10 +67,12 @@ FL-COMMANDfleet
 FN-Fiscal Note Interface
 FS-Flat Scale Interfaces
 GL-General Ledger
+select YEAR(trans_DATE) YEAR,MONTH(trans_DATE) MONTH,count(*) as total_count from igld group by year(trans_date),month(trans_date) order by year,month
 GM-Windows Tracking and Scheduling
 GP-Graphic Performance Monitor
 ID-Caller Identification
 IG-Invoicing
+select YEAR(trans_DATE) YEAR,MONTH(trans_DATE) MONTH,count(*) as total_count from idtl group by year(trans_date),month(trans_date) order by year,month
 IN-Inform Interface
 IV-Inventory
 ***
@@ -91,10 +110,14 @@ MS-Mobile Signaling
 select count(t.truck_code) as valid_truck from sigu s join truc t on t.signl_unit_code = s.signl_unit_code where t.gps_flag = 1 and t.auto_status_flag = 1 and t.signl_unit_code is not null
 MT-Map Truck Tracking
 OE-Order Entry & Ticketing
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CC' group by year(order_date),month(order_date) order by year,month
+select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 OL-Overhead Loadout
 OM-Order Monitoring
 PC-Credit Card Payment Processing
 PM-Pump Services
+select count(*),pump_truck_type from ttyp group by pump_truck_type
+select truck_type,descr,pump_truck_type from ttyp order by pump_truck_type
 PO-Purchasing
 PP-Pricing & Prep
 PR-Contribution Reports
@@ -103,6 +126,7 @@ QU-Quotations
   select count(quote_code),min(update_date) as earliest_date,max(update_date) as newest_date from quot
   select count(job_id),min(update_date) as earliest_date,max(update_date) as newest_date from jobs
 RO-Rostering
+select YEAR(rost_order_DATE) YEAR,MONTH(rost_order_DATE) MONTH,count(*) as total_count from rosl group by year(rost_order_date),month(rost_order_date) order by year,month
 RP-Replication Services
 SC-ScheduleCom
 SH-Scheduling
