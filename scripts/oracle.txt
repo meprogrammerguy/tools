@@ -1,0 +1,118 @@
+== tested against cs08_2_29 on al-qa11gr2-s00
+AL-Auto-Loadout
+select count (k.auto_tkt_unit_code), min(k.update_date) as first_date, max(k.update_date) as last_date from autk k,autl l where (k.auto_tkt_unit_code = l.auto_tkt_unit_code)
+AP-Accounts Payable
+AR-Accounts Receivable
+select extract(year from batch_DATE) as yr, extract(month from batch_DATE) as mon, count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from arhd group by extract(year from batch_DATE), extract(month from batch_DATE) order by yr, mon;
+AS-Auto-Statusing
+AT-Auto-Ticketing
+AU-Auditing
+== order audit
+select min(audit_log_date),max(audit_log_date),count(*) from audo
+== newer audit
+select extract(year from audit_DATE) as yr, extract(month from audit_DATE) as mon, file_name,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from audt group by extract(year from audit_DATE), extract(month from audit_DATE),file_name order by yr, mon,file_name;
+BI-Batch Computer Interfaces
+== dispatch grouped also by prod_line_code
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,prod_line_code,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  group by extract(year from order_DATE), extract(month from order_DATE),prod_line_code order by yr, mon, prod_line_code;
+==
+CA-Aggregate Dispatch
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CA' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CA') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
+CB-Block & Building Material Dispatch
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CB' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CB') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
+CC-Concrete Dispatch
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CC' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
+CD-Asphalt
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CD' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CD') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
+CE-Eagle Batching
+CI-Color Interface
+CO-Concrete Optimization
+CP-COMMANDperformance
+CR-Credit Checking
+CT-Cartage
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from cttk group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+CW-COMMANDwriter
+DA-Data Archiving
+DC-Driver Call In Management
+select extract(year from callin_DATE) as yr, extract(month from callin_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from drci group by extract(year from callin_DATE), extract(month from callin_DATE) order by yr, mon;
+DI-Document Imaging
+DS-Dynamic Scheduling
+EX-COMMANDexecutive
+FL-COMMANDfleet
+FN-Fiscal Note Interface
+FS-Flat Scale Interfaces
+GL-General Ledger
+select extract(year from trans_DATE) as yr, extract(month from trans_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from igld group by extract(year from trans_DATE), extract(month from trans_DATE) order by yr, mon;
+GM-Windows Tracking and Scheduling
+GP-Graphic Performance Monitor
+ID-Caller Identification
+IG-Invoicing
+select extract(year from trans_DATE) as yr, extract(month from trans_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from idtl group by extract(year from trans_DATE), extract(month from trans_DATE) order by yr, mon;
+IN-Inform Interface
+IV-Inventory
+***
+LN-Liens
+== number of liens and oldest and newest dates
+select count(lien_loc_code),min(update_date) as early_date,max(update_date) as newest_date from lnhd
+***
+MM-Material Manager
+***
+MO-Map Order Entry
+== number of mapped plants
+select count(plant_code) from plnt where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped projects
+select count(proj_code) from proj where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped quotes
+select count(quote_code) from quot where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped jobs
+select count(job_id) from jobs where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped lien locations
+select count(lien_loc_code) from lnhd where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+== number of mapped trucks
+select count(truck_code) from truc where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== earliest and last mapped date
+select max(map_update_date) as last_mapped,min(map_update_date) as first_mapped from truc where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== orders with long and lat
+select order_date,order_code,map_lat,map_long,map_radius,map_updt_ordr_coord_flag,map_truck_poll_type from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000'
+== orders with coordinates mapped in tracking 
+select order_date,order_code,map_lat,map_long,map_radius,map_updt_ordr_coord_flag,map_truck_poll_type from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000' and map_updt_ordr_coord_flag = 'T'
+== count of orders mapped and oldest and newest dates in tracking
+select count(order_code) as order_count, min(update_date) as oldest_date,max(update_date) as newest_date from ordr where map_lat is not null and map_long is not null and map_lat != '00000000' and map_long != '00000000' and map_updt_ordr_coord_flag = 'T'
+== count of tickets mapped and earliest and newest dates
+select count(tkt_code),min(update_date) as earliest_date,max(update_date) as newest_date from tick where map_lat is not null and map_long is not null and map_radius is not null and map_lat != '00000000' and map_long != '00000000'
+***
+MS-Mobile Signaling
+select count(t.truck_code) as valid_truck from sigu s join truc t on t.signl_unit_code = s.signl_unit_code where t.gps_flag = 'T' and t.auto_status_flag = 'T' and t.signl_unit_code is not null
+MT-Map Truck Tracking
+OE-Order Entry & Ticketing
+select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CC' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
+select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
+OL-Overhead Loadout
+OM-Order Monitoring
+PC-Credit Card Payment Processing
+PM-Pump Services
+select count(*),pump_truck_type from ttyp group by pump_truck_type
+select truck_type,descr,pump_truck_type from ttyp order by pump_truck_type
+PO-Purchasing
+PP-Pricing & Prep
+PR-Contribution Reports
+PS-Product Sales Option
+QU-Quotations
+  select count(quote_code),min(update_date) as earliest_date,max(update_date) as newest_date from quot
+  select count(job_id),min(update_date) as earliest_date,max(update_date) as newest_date from jobs
+RO-Rostering
+select extract(year from rost_order_DATE) as yr, extract(month from rost_order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from rosl group by extract(year from rost_order_DATE), extract(month from rost_order_DATE) order by yr, mon;
+RP-Replication Services
+SC-ScheduleCom
+SH-Scheduling
+SR-Sales Reports
+SS-Sample Scheduling
+ST-Snail Trail
+SV-Services
+TA-Time Analysis
+TF-Traffic Restrictions
+TT-Truck Tracking
+WA-Water Added

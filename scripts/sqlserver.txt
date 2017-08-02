@@ -57,9 +57,11 @@ CO-Concrete Optimization
 CP-COMMANDperformance
 CR-Credit Checking
 CT-Cartage
+select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from cttk group by year(order_date),month(order_date) order by year,month
 CW-COMMANDwriter
 DA-Data Archiving
 DC-Driver Call In Management
+select YEAR(callin_DATE) YEAR,MONTH(callin_DATE) MONTH,count(*) as total_count from drci group by year(callin_date),month(callin_date) order by year,month
 DI-Document Imaging
 DS-Dynamic Scheduling
 EX-COMMANDexecutive
