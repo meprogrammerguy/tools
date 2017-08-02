@@ -52,8 +52,11 @@ CD-Asphalt
 select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CD' group by year(order_date),month(order_date) order by year,month
 select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CD' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 CE-Eagle Batching
+SELECT record_type,Count(record_type) FROM licd GROUP BY record_type
 CI-Color Interface
+SELECT record_type,Count(record_type) FROM licd GROUP BY record_type
 CO-Concrete Optimization
+SELECT Count(plant_code) AS plant_count,optimize_code FROM plnt GROUP BY optimize_code ORDER BY optimize_code
 CP-COMMANDperformance
 CR-Credit Checking
 CT-Cartage
@@ -115,6 +118,7 @@ OE-Order Entry & Ticketing
 select YEAR(order_DATE) YEAR,MONTH(order_DATE) MONTH,count(*) as total_count from ordr where prod_line_code = 'CC' group by year(order_date),month(order_date) order by year,month
 select YEAR(t.tkt_DATE) YEAR,MONTH(t.tkt_DATE) MONTH,count(*) as total_count from ordr o,tick t where o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC' group by year(t.tkt_date),month(t.tkt_date) order by year,month
 OL-Overhead Loadout
+SELECT record_type,Count(record_type) FROM licd where record_type = 'OVLT' GROUP BY record_type
 OM-Order Monitoring
 PC-Credit Card Payment Processing
 PM-Pump Services
@@ -136,6 +140,7 @@ SR-Sales Reports
 SS-Sample Scheduling
 ST-Snail Trail
 SV-Services
+SELECT service_operation_code FROM licd WHERE record_type = 'SVCT'
 TA-Time Analysis
 TF-Traffic Restrictions
 TT-Truck Tracking

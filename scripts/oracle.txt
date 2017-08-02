@@ -28,8 +28,11 @@ CD-Asphalt
 select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CD' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
 select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CD') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
 CE-Eagle Batching
+SELECT record_type,Count(record_type) FROM licd GROUP BY record_type
 CI-Color Interface
+SELECT record_type,Count(record_type) FROM licd GROUP BY record_type
 CO-Concrete Optimization
+SELECT Count(plant_code) AS plant_count,optimize_code FROM plnt GROUP BY optimize_code ORDER BY optimize_code
 CP-COMMANDperformance
 CR-Credit Checking
 CT-Cartage
@@ -91,6 +94,7 @@ OE-Order Entry & Ticketing
 select extract(year from order_DATE) as yr, extract(month from order_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr  WHERE prod_line_code = 'CC' group by extract(year from order_DATE), extract(month from order_DATE) order by yr, mon;
 select extract(year from t.tkt_DATE) as yr, extract(month from t.tkt_DATE) as mon,count(*) RecordsPerGroup, COUNT(*) OVER () AS TotalRecords from ordr o,tick t where (o.order_date = t.order_date and o.order_code = t.order_code and o.prod_line_code = 'CC') GROUP BY extract(year from t.tkt_DATE), extract(month from t.tkt_DATE) order by yr, mon;
 OL-Overhead Loadout
+SELECT record_type,Count(record_type) FROM licd where record_type = 'OVLT' GROUP BY record_type
 OM-Order Monitoring
 PC-Credit Card Payment Processing
 PM-Pump Services
@@ -112,6 +116,7 @@ SR-Sales Reports
 SS-Sample Scheduling
 ST-Snail Trail
 SV-Services
+SELECT service_operation_code FROM licd WHERE record_type = 'SVCT'
 TA-Time Analysis
 TF-Traffic Restrictions
 TT-Truck Tracking
